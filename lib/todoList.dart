@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:to_do_list/toDo.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
+import 'package:to_do_list/store/todo_list_store.dart';
 import 'package:to_do_list/todoItem.dart';
 import 'package:uuid/uuid.dart';
-
 
 class TodoList extends StatefulWidget {
   const TodoList({super.key});
@@ -14,56 +15,47 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  final List<Todo> _todos = <Todo>[];
-  var uuid = Uuid();
+  @observable
+  late final _todoStore;
+
+  @override
+  void initState() {
+    _todoStore = TodoStore(uuid: const Uuid());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('To Do List'),
+        leading: GestureDetector(
+          onTap: () {
+            _todoStore.deleteDoneTodoItems();
+          },
+          child: Icon(
+            Icons.auto_delete_outlined, // add custom icons also
+          ),
+        ),
       ),
-      body: ListView.builder(
-          itemCount: _todos.length,
-          itemBuilder: (context, index) {
-            return TodoItem(
-              id: uuid.v1(),
-              todo: _todos[index],
-              onTodoChanged: _handleTodoChange,
-              todoDelete: _deleteTodoItem,
-              todoEdit: _editTodoItem,
-            );
-          }),
+      body: Observer(
+
+        builder: (_) => ListView.builder(
+            itemCount: _todoStore.todos.length,
+            itemBuilder: (context, index) {
+              return TodoItem(
+                todo: _todoStore.todos[index],
+                onTodoChanged: _todoStore.handleTodoChange,
+                todoDelete: _todoStore.deleteTodoItem,
+                todoEdit: _todoStore.editTodoItem,
+              );
+            }),
+      ),
       floatingActionButton: FloatingActionButton(
           onPressed: () => _displayAddDialog(),
           tooltip: 'Add Task',
           child: const Icon(Icons.add)),
     );
-  }
-
-  void _handleTodoChange(Todo todo) {
-    setState(() {
-      todo = todo.copyWith(checked: !todo.checked);
-    });
-  }
-
-  void _addTodoItem(String name) {
-    setState(() {
-      _todos.add(Todo(id: uuid.v1(), name: name, checked: false));
-    });
-  }
-
-  void _deleteTodoItem(String id) {
-    setState(() {
-      _todos.removeWhere((item) => item.id == id);
-    });
-  }
-
-  void _editTodoItem(String id, String name, bool isEdit) {
-    setState(() {
-      _todos[_todos.indexWhere((element) => element.id == id)] =
-          Todo(id: id, name: name, checked: false, isEdit: isEdit);
-    });
   }
 
   Future<void> _displayAddDialog() async {
@@ -83,7 +75,7 @@ class _TodoListState extends State<TodoList> {
               child: const Text('Add'),
               onPressed: () {
                 Navigator.of(context).pop();
-                _addTodoItem(textFieldController.text);
+                _todoStore.addTodoItem(textFieldController.text);
               },
             ),
           ],
