@@ -34,7 +34,7 @@ class _TodoListState extends State<TodoList> {
             _todoStore.deleteDoneTodoItems();
           },
           child: Icon(
-            Icons.auto_delete_outlined, // add custom icons also
+            Icons.auto_delete_outlined,
           ),
         ),
       ),
