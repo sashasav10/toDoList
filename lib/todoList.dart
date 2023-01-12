@@ -21,6 +21,7 @@ class _TodoListState extends State<TodoList> {
   @override
   void initState() {
     _todoStore = TodoStore(uuid: const Uuid());
+    //_todoStore.init();
     super.initState();
   }
 

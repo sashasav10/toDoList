@@ -12,16 +12,24 @@ mixin _$TodoStore on _TodoStore, Store {
   late final _$_todosAtom = Atom(name: '_TodoStore._todos', context: context);
 
   @override
-  ObservableList<Todo> get _todos {
+  List<Todo> get _todos {
     _$_todosAtom.reportRead();
     return super._todos;
   }
 
   @override
-  set _todos(ObservableList<Todo> value) {
+  set _todos(List<Todo> value) {
     _$_todosAtom.reportWrite(value, super._todos, () {
       super._todos = value;
     });
+  }
+
+  late final _$initAsyncAction =
+      AsyncAction('_TodoStore.init', context: context);
+
+  @override
+  Future<void> init() {
+    return _$initAsyncAction.run(() => super.init());
   }
 
   late final _$_TodoStoreActionController =
