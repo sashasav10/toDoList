@@ -3,7 +3,7 @@ import 'package:to_do_list/toDo.dart';
 
 class TodoItem extends StatelessWidget {
   TodoItem(
-      {required this.id,
+      {
       required this.todo,
       required this.onTodoChanged,
       required this.todoDelete,
@@ -12,11 +12,10 @@ class TodoItem extends StatelessWidget {
     textFieldController.text = todo.name;
   }
 
-  final id;
-  Todo todo;
-  final onTodoChanged;
-  final todoDelete;
-  final todoEdit;
+  final Todo todo;
+  final Function onTodoChanged;
+  final Function todoDelete;
+  final Function todoEdit;
 
   final TextEditingController textFieldController = TextEditingController();
 
@@ -34,7 +33,7 @@ class TodoItem extends StatelessWidget {
     return IntrinsicHeight(
       child: Row(children: [
          Checkbox(
-          checkColor: Colors.black,
+          checkColor: Colors.white,
           value: todo.checked,
           onChanged: (bool? value) {
             onTodoChanged(todo);
