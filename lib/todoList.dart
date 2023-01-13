@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:to_do_list/store/todo_list_store.dart';
 import 'package:to_do_list/todoItem.dart';
+import 'package:to_do_list/todo_db_service.dart';
 import 'package:uuid/uuid.dart';
 
 class TodoList extends StatefulWidget {
@@ -20,7 +21,8 @@ class _TodoListState extends State<TodoList> {
 
   @override
   void initState() {
-    _todoStore = TodoStore(uuid: const Uuid());
+    _todoStore = TodoStore(uuid: const Uuid(), todoDbService: TodoDbService());
+    _todoStore.init();
     super.initState();
   }
 
@@ -39,7 +41,6 @@ class _TodoListState extends State<TodoList> {
         ),
       ),
       body: Observer(
-
         builder: (_) => ListView.builder(
             itemCount: _todoStore.todos.length,
             itemBuilder: (context, index) {

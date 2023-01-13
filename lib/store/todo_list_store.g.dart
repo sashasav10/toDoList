@@ -24,6 +24,14 @@ mixin _$TodoStore on _TodoStore, Store {
     });
   }
 
+  late final _$initAsyncAction =
+      AsyncAction('_TodoStore.init', context: context);
+
+  @override
+  Future<void> init() {
+    return _$initAsyncAction.run(() => super.init());
+  }
+
   late final _$_TodoStoreActionController =
       ActionController(name: '_TodoStore', context: context);
 

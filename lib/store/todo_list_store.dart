@@ -2,42 +2,57 @@ import 'package:mobx/mobx.dart';
 import 'package:to_do_list/toDo.dart';
 import 'package:uuid/uuid.dart';
 
+import '../todo_db_service.dart';
+
 part 'todo_list_store.g.dart';
 
 class TodoStore = _TodoStore with _$TodoStore;
 
 abstract class _TodoStore with Store {
-  _TodoStore({required this.uuid});
+  _TodoStore({required this.uuid, required this.todoDbService});
 
   final Uuid uuid;
+  final TodoDbService todoDbService;
   @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();
 
   ObservableList<Todo> get todos => _todos;
 
   @action
+  Future<void> init() async {
+    _todos.addAll(await todoDbService.getTodoFromSF());
+  }
+
+  @action
   void handleTodoChange(Todo todo) {
     _todos[getToDoIndexById(todo.id)] = todo.copyWith(checked: !todo.checked);
+    todoDbService.addTodoToSP(_todos);
   }
 
   @action
   void addTodoItem(String name) {
     _todos.add(Todo(id: uuid.v1(), name: name, checked: false));
+    todoDbService.addTodoToSP(_todos);
+    print(todos.length);
   }
 
   @action
   void deleteTodoItem(String id) {
     _todos.removeWhere((item) => item.id == id);
+    todoDbService.addTodoToSP(_todos);
   }
 
   @action
   void editTodoItem(String id, String name, bool isEdit) {
     _todos[getToDoIndexById(id)] =
         Todo(id: id, name: name, checked: false, isEdit: isEdit);
+    todoDbService.addTodoToSP(_todos);
   }
+
   @action
   void deleteDoneTodoItems() {
     _todos.removeWhere((element) => element.checked == true);
+    todoDbService.addTodoToSP(_todos);
   }
 
   int getToDoIndexById(String id) {
