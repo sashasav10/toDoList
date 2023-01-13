@@ -22,8 +22,7 @@ class _TodoListState extends State<TodoList> {
 
   @override
   void initState() {
-    TodoDbService todoDbService =
-        Provider.of<TodoDbService>(context, listen: false);
+    TodoDbService todoDbService = TodoDbService.of(context);
     _todoStore = TodoStore(uuid: const Uuid(), todoDbService: todoDbService);
     _todoStore.init();
     super.initState();
