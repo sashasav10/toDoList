@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_list/todoList.dart';
-void main() => runApp(const TodoApp());
+import 'package:to_do_list/todo_db_service.dart';
+
+void main() => runApp(
+      Provider<TodoDbService>(
+        create: (_) => TodoDbService(),
+        child: const TodoApp(),
+      ),
+    );
 
 class TodoApp extends StatelessWidget {
   const TodoApp({super.key});
@@ -15,6 +23,3 @@ class TodoApp extends StatelessWidget {
     );
   }
 }
-
-
-

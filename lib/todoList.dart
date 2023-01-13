@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_list/store/todo_list_store.dart';
 import 'package:to_do_list/todoItem.dart';
 import 'package:to_do_list/todo_db_service.dart';
@@ -21,7 +22,9 @@ class _TodoListState extends State<TodoList> {
 
   @override
   void initState() {
-    _todoStore = TodoStore(uuid: const Uuid(), todoDbService: TodoDbService());
+    TodoDbService todoDbService =
+        Provider.of<TodoDbService>(context, listen: false);
+    _todoStore = TodoStore(uuid: const Uuid(), todoDbService: todoDbService);
     _todoStore.init();
     super.initState();
   }
@@ -35,7 +38,7 @@ class _TodoListState extends State<TodoList> {
           onTap: () {
             _todoStore.deleteDoneTodoItems();
           },
-          child: Icon(
+          child: const Icon(
             Icons.auto_delete_outlined,
           ),
         ),
