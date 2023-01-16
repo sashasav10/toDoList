@@ -4,12 +4,12 @@ import 'package:uuid/uuid.dart';
 
 import '../todo_db_service.dart';
 
-part 'todo_list_store.g.dart';
+part 'detailed_task_store.g.dart';
 
-class TodoStore = _TodoStore with _$TodoStore;
+class DetailedTask = _DetailedTask with _$DetailedTask;
 
-abstract class _TodoStore with Store {
-  _TodoStore({required this.uuid, required this.todoDbService});
+abstract class _DetailedTask with Store {
+  _DetailedTask({required this.uuid, required this.todoDbService});
 
   final Uuid uuid;
   final TodoDbService todoDbService;
@@ -26,13 +26,6 @@ abstract class _TodoStore with Store {
   @action
   void handleTodoChange(Todo todo) {
     _todos[getToDoIndexById(todo.id)] = todo.copyWith(checked: !todo.checked);
-    todoDbService.addTodoToSP(_todos);
-  }
-
-  @action
-  void addTodoItem(String name, String description) {
-    _todos.add(Todo(
-        id: uuid.v1(), name: name, description: description, checked: false));
     todoDbService.addTodoToSP(_todos);
   }
 
