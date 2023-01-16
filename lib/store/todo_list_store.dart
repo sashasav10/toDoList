@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 import 'package:uuid/uuid.dart';
 
@@ -6,7 +7,11 @@ import '../todo_db_service.dart';
 
 part 'todo_list_store.g.dart';
 
-class TodoStore = _TodoStore with _$TodoStore;
+class TodoStore extends _TodoStore with _$TodoStore {
+  TodoStore({required super.uuid, required super.todoDbService});
+
+  static TodoStore of(context) => Provider.of(context, listen: false);
+}
 
 abstract class _TodoStore with Store {
   _TodoStore({required this.uuid, required this.todoDbService});
@@ -31,6 +36,7 @@ abstract class _TodoStore with Store {
 
   @action
   void addTodoItem(String name, String description) {
+    print(name);
     _todos.add(Todo(
         id: uuid.v1(), name: name, description: description, checked: false));
     todoDbService.addTodoToSP(_todos);

@@ -16,14 +16,9 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  @observable
-  late final _todoStore;
-
   @override
   void initState() {
-    TodoDbService todoDbService = TodoDbService.of(context);
-    _todoStore = TodoStore(uuid: const Uuid(), todoDbService: todoDbService);
-    _todoStore.init();
+    TodoStore.of(context).init();
     super.initState();
   }
 
@@ -34,7 +29,7 @@ class _TodoListState extends State<TodoList> {
         title: const Text('To Do List'),
         leading: GestureDetector(
           onTap: () {
-            _todoStore.deleteDoneTodoItems();
+            TodoStore.of(context).deleteDoneTodoItems();
           },
           child: const Icon(
             Icons.auto_delete_outlined,
@@ -42,16 +37,17 @@ class _TodoListState extends State<TodoList> {
         ),
       ),
       body: Observer(
-        builder: (_) => ListView.builder(
-            itemCount: _todoStore.todos.length,
-            itemBuilder: (context, index) {
-              return TodoItem(
-                todo: _todoStore.todos[index],
-                onTodoChanged: _todoStore.handleTodoChange,
-                todoDelete: _todoStore.deleteTodoItem,
-                todoEdit: _todoStore.editTodoItem,
-              );
-            }),
+        builder: (context) => ListView.builder(
+          itemCount: TodoStore.of(context).todos.length,
+          itemBuilder: (context, index) {
+            return TodoItem(
+              todo: TodoStore.of(context).todos[index],
+              onTodoChanged: TodoStore.of(context).handleTodoChange,
+              todoDelete: TodoStore.of(context).deleteTodoItem,
+              todoEdit: TodoStore.of(context).editTodoItem,
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () => _displayAddDialog(),
@@ -90,7 +86,7 @@ class _TodoListState extends State<TodoList> {
               child: const Text('Add'),
               onPressed: () {
                 Navigator.of(context).pop();
-                _todoStore.addTodoItem(nameTextFieldController.text,
+                TodoStore.of(context).addTodoItem(nameTextFieldController.text,
                     descriptionTextFieldController.text);
               },
             ),
