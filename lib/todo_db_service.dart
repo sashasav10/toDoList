@@ -15,7 +15,8 @@ class TodoDbService {
   Future<List<Todo>> getTodoFromSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? todoString = prefs.getString(_todoKey);
-    return await decode(todoString!);
+    if (todoString == null) return [];
+    return await decode(todoString);
   }
 
   String encode(List<Todo> todos) => json.encode(

@@ -25,6 +25,7 @@ abstract class _TodoStore with Store {
 
   @action
   Future<void> init() async {
+    _todos.clear();
     _todos.addAll(await todoDbService.getTodoFromSF());
   }
 
@@ -36,7 +37,6 @@ abstract class _TodoStore with Store {
 
   @action
   void addTodoItem(String name, String description) {
-    print(name);
     _todos.add(Todo(
         id: uuid.v1(), name: name, description: description, checked: false));
     todoDbService.addTodoToSP(_todos);
@@ -69,5 +69,11 @@ abstract class _TodoStore with Store {
     final index = _todos.indexWhere((element) => element.id == id);
     if (index < 0) throw Exception("Index must be more than 0");
     return index;
+  }
+
+  Todo getToDoById(String id) {
+    final index = _todos.indexWhere((element) => element.id == id);
+    if (index < 0) throw Exception("Index must be more than 0");
+    return _todos[index];
   }
 }

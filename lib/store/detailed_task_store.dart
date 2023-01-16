@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 import 'package:uuid/uuid.dart';
 
@@ -6,10 +7,14 @@ import '../todo_db_service.dart';
 
 part 'detailed_task_store.g.dart';
 
-class DetailedTask = _DetailedTask with _$DetailedTask;
+class DetailedTaskStore extends _DetailedTaskStore with _$DetailedTaskStore {
+  DetailedTaskStore({required super.uuid, required super.todoDbService});
 
-abstract class _DetailedTask with Store {
-  _DetailedTask({required this.uuid, required this.todoDbService});
+  static DetailedTaskStore of(context) => Provider.of(context, listen: false);
+}
+
+abstract class _DetailedTaskStore with Store {
+  _DetailedTaskStore({required this.uuid, required this.todoDbService});
 
   final Uuid uuid;
   final TodoDbService todoDbService;
@@ -56,5 +61,11 @@ abstract class _DetailedTask with Store {
     final index = _todos.indexWhere((element) => element.id == id);
     if (index < 0) throw Exception("Index must be more than 0");
     return index;
+  }
+
+  Todo getToDoById(String id) {
+    final index = _todos.indexWhere((element) => element.id == id);
+    if (index < 0) throw Exception("Index must be more than 0");
+    return _todos[index];
   }
 }

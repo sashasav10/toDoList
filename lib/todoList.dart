@@ -37,7 +37,7 @@ class _TodoListState extends State<TodoList> {
         ),
       ),
       body: Observer(
-        builder: (context) => ListView.builder(
+        builder: (_) => ListView.builder(
           itemCount: TodoStore.of(context).todos.length,
           itemBuilder: (context, index) {
             return TodoItem(
@@ -50,13 +50,15 @@ class _TodoListState extends State<TodoList> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => _displayAddDialog(),
+          onPressed: () => _displayAddDialog(TodoStore.of(context).addTodoItem),
           tooltip: 'Add Task',
           child: const Icon(Icons.add)),
     );
   }
 
-  Future<void> _displayAddDialog() async {
+  Future<void> _displayAddDialog(
+    Function(String title, String description) onCreate,
+  ) async {
     final TextEditingController nameTextFieldController =
         TextEditingController();
     final TextEditingController descriptionTextFieldController =
@@ -86,8 +88,10 @@ class _TodoListState extends State<TodoList> {
               child: const Text('Add'),
               onPressed: () {
                 Navigator.of(context).pop();
-                TodoStore.of(context).addTodoItem(nameTextFieldController.text,
-                    descriptionTextFieldController.text);
+                onCreate(
+                  nameTextFieldController.text,
+                  descriptionTextFieldController.text,
+                );
               },
             ),
           ],

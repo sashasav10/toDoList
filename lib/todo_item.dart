@@ -9,7 +9,8 @@ class TodoItem extends StatelessWidget {
       required this.todoDelete,
       required this.todoEdit})
       : super(key: ObjectKey(todo)) {
-    textFieldController.text = todo.name;
+    nameTextFieldController.text = todo.name;
+    descriptionTextFieldController.text = todo.description;
   }
 
   final Todo todo;
@@ -17,7 +18,9 @@ class TodoItem extends StatelessWidget {
   final Function todoDelete;
   final Function todoEdit;
 
-  final TextEditingController textFieldController = TextEditingController();
+  final TextEditingController nameTextFieldController = TextEditingController();
+  final TextEditingController descriptionTextFieldController =
+      TextEditingController();
 
   TextStyle? _getTextStyle(bool checked) {
     if (!checked) return null;
@@ -30,39 +33,66 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final id = todo.id;
     return IntrinsicHeight(
       child: GestureDetector(
-        onTap: () => context.go('/detailed_task_screen'),
-        child: Row(children: [
-          Checkbox(
-            checkColor: Colors.white,
-            value: todo.checked,
-            onChanged: (bool? value) {
-              onTodoChanged(todo);
-            },
-          ),
-          if (todo.isEdit)
-            Expanded(child: TextField(controller: textFieldController))
-          else
-            Expanded(
-              child: Text(
-                todo.name,
-                style: _getTextStyle(todo.checked),
-              ),
+        onTap: () => context.goNamed(
+          'detailed_task_screen',
+          queryParams: {"id": id},
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(children: [
+            Checkbox(
+              checkColor: Colors.white,
+              value: todo.checked,
+              onChanged: (bool? value) {
+                onTodoChanged(todo);
+              },
             ),
-          IconButton(
-            icon: const Icon(Icons.account_balance_wallet, size: 16),
-            onPressed: () {
-              todoEdit(todo.id, textFieldController.text, !todo.isEdit);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete, size: 16),
-            onPressed: () {
-              todoDelete(todo.id);
-            },
-          ),
-        ]),
+            Expanded(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (todo.isEdit)
+                      Expanded(
+                          child: TextField(controller: nameTextFieldController))
+                    else
+                      Expanded(
+                        child: Text(
+                          todo.name,
+                          style: _getTextStyle(todo.checked),
+                        ),
+                      ),
+                    if (todo.isEdit)
+                      Expanded(
+                          child: TextField(
+                              controller: descriptionTextFieldController))
+                    else
+                      Expanded(
+                        child: Text(
+                          todo.description,
+                          style: _getTextStyle(todo.checked),
+                        ),
+                      ),
+                  ]),
+            ),
+            IconButton(
+              icon: const Icon(Icons.account_balance_wallet, size: 16),
+              onPressed: () {
+                todoEdit(todo.id, nameTextFieldController.text,
+                    descriptionTextFieldController.text, !todo.isEdit);
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete, size: 16),
+              onPressed: () {
+                todoDelete(todo.id);
+              },
+            ),
+          ]),
+        ),
       ),
     );
   }
