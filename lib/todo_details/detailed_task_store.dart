@@ -1,48 +1,52 @@
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
-import 'package:uuid/uuid.dart';
 
-import '../todo_db_service.dart';
+import '../services/todo_db_service.dart';
 
 part 'detailed_task_store.g.dart';
 
 class DetailedTaskStore extends _DetailedTaskStore with _$DetailedTaskStore {
-  DetailedTaskStore({required super.uuid, required super.todoDbService});
+  DetailedTaskStore({required super.todoDbService, required super.id});
 
   static DetailedTaskStore of(context) => Provider.of(context, listen: false);
 }
 
 abstract class _DetailedTaskStore with Store {
-  _DetailedTaskStore({required this.uuid, required this.todoDbService});
-
-  final Uuid uuid;
+  _DetailedTaskStore({required this.todoDbService, required this.id});
+  @observable
+  var isLoading = true;
   final TodoDbService todoDbService;
+  final String id;
+  @observable
+  late Todo todoItem;
   @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();
 
-  ObservableList<Todo> get todos => _todos;
-
   @action
   Future<void> init() async {
-    _todos.addAll(await todoDbService.getTodoFromSF());
+    final todoList = await todoDbService.getTodoFromSF();
+    _todos.addAll(todoList);
+    todoItem = _getToDoById(id);
+    isLoading = false;
   }
 
   @action
-  void handleTodoChange(Todo todo) {
-    _todos[getToDoIndexById(todo.id)] = todo.copyWith(checked: !todo.checked);
+  void handleTodoChange() {
+    _todos[_getToDoIndexById(id)] =
+        todoItem.copyWith(checked: !todoItem.checked);
     todoDbService.addTodoToSP(_todos);
   }
 
   @action
-  void deleteTodoItem(String id) {
+  void deleteTodoItem() {
     _todos.removeWhere((item) => item.id == id);
     todoDbService.addTodoToSP(_todos);
   }
 
   @action
-  void editTodoItem(String id, String name, String description, bool isEdit) {
-    _todos[getToDoIndexById(id)] = Todo(
+  void editTodoItem(String name, String description, bool isEdit) {
+    _todos[_getToDoIndexById(id)] = Todo(
         id: id,
         name: name,
         description: description,
@@ -57,15 +61,14 @@ abstract class _DetailedTaskStore with Store {
     todoDbService.addTodoToSP(_todos);
   }
 
-  int getToDoIndexById(String id) {
+  int _getToDoIndexById(String id) {
     final index = _todos.indexWhere((element) => element.id == id);
     if (index < 0) throw Exception("Index must be more than 0");
     return index;
   }
 
-  Todo getToDoById(String id) {
-    final index = _todos.indexWhere((element) => element.id == id);
-    if (index < 0) throw Exception("Index must be more than 0");
+  Todo _getToDoById(String id) {
+    final index = _getToDoIndexById(id);
     return _todos[index];
   }
 }

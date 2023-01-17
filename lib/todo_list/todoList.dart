@@ -3,9 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:to_do_list/store/todo_list_store.dart';
-import 'package:to_do_list/todo_item.dart';
-import 'package:to_do_list/todo_db_service.dart';
+import 'package:to_do_list/todo_list/todo_list_store.dart';
+import 'package:to_do_list/todo_list/todo_item.dart';
 import 'package:uuid/uuid.dart';
 
 class TodoList extends StatefulWidget {
@@ -70,18 +69,23 @@ class _TodoListState extends State<TodoList> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Add a new todo item'),
-          content: Column(
-            children: [
-              TextField(
-                controller: nameTextFieldController,
-                decoration:
-                    const InputDecoration(hintText: 'Type name of new todo'),
-              ),
-              TextField(
-                controller: descriptionTextFieldController,
-                decoration: const InputDecoration(hintText: 'Type description'),
-              ),
-            ],
+          content: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: nameTextFieldController,
+                  decoration:
+                      const InputDecoration(hintText: 'Type name of new todo'),
+                ),
+                TextField(
+                  controller: descriptionTextFieldController,
+                  decoration:
+                      const InputDecoration(hintText: 'Type description'),
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
             TextButton(

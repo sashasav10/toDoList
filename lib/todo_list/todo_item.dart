@@ -81,8 +81,12 @@ class TodoItem extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.account_balance_wallet, size: 16),
               onPressed: () {
-                todoEdit(todo.id, nameTextFieldController.text,
-                    descriptionTextFieldController.text, !todo.isEdit);
+                todoEdit(
+                  todo.id,
+                  nameTextFieldController.text,
+                  descriptionTextFieldController.text,
+                  !todo.isEdit,
+                );
               },
             ),
             IconButton(

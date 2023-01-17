@@ -11,15 +11,21 @@ class Todo {
   final String name;
   final String description;
   final bool checked;
-  bool isEdit;
+  final bool isEdit;
 
-  Todo copyWith(
-          {String? id, String? name, String? description, bool? checked}) =>
+  Todo copyWith({
+    String? id,
+    String? name,
+    String? description,
+    bool? checked,
+    bool? isEdit,
+  }) =>
       Todo(
         id: id ?? this.id,
         name: name ?? this.name,
         description: description ?? this.description,
         checked: checked ?? this.checked,
+        isEdit: isEdit ?? this.isEdit,
       );
 
   static fromJson(Map<String, dynamic> jsonData) {
