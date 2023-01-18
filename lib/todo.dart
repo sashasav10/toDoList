@@ -13,7 +13,7 @@ class Todo {
   final bool checked;
   final bool isEdit;
 
-  Todo copyWith({
+  Todo? copyWith({
     String? id,
     String? name,
     String? description,

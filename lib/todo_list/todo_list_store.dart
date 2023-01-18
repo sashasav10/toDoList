@@ -33,7 +33,7 @@ abstract class _TodoStore with Store {
 
   @action
   void handleTodoChange(Todo todo) {
-    _todos[getToDoIndexById(todo.id)] = todo.copyWith(checked: !todo.checked);
+    _todos[getToDoIndexById(todo.id)] = todo.copyWith(checked: !todo.checked)!;
     todoDbService.addTodoToSP(_todos);
   }
 
@@ -53,8 +53,8 @@ abstract class _TodoStore with Store {
 
   @action
   void editTodoItem(String id, String name, String description, bool isEdit) {
-    _todos[getToDoIndexById(id)] = _todos[getToDoIndexById(id)]
-        .copyWith(id: id, name: name, description: description, isEdit: isEdit);
+    _todos[getToDoIndexById(id)] = _todos[getToDoIndexById(id)].copyWith(
+        id: id, name: name, description: description, isEdit: isEdit)!;
     todoDbService.addTodoToSP(_todos);
   }
 

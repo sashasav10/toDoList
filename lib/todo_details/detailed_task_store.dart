@@ -29,11 +29,14 @@ abstract class _DetailedTaskStore with Store {
     todoItem = _getToDoById(id);
   }
 
+  void updateDBService() async {
+    _todos[_getToDoIndexById(id)] = todoItem!;
+    todoDbService.addTodoToSP(_todos);
+  }
+
   @action
   void handleTodoChange() {
-    _todos[_getToDoIndexById(id)] =
-        todoItem!.copyWith(checked: !todoItem!.checked);
-    todoDbService.addTodoToSP(_todos);
+    todoItem = todoItem?.copyWith(checked: !todoItem!.checked);
   }
 
   @action
@@ -44,13 +47,8 @@ abstract class _DetailedTaskStore with Store {
 
   @action
   void editTodoItem(String name, String description, bool isEdit) {
-    _todos[_getToDoIndexById(id)] = Todo(
-        id: id,
-        name: name,
-        description: description,
-        checked: false,
-        isEdit: isEdit);
-    todoDbService.addTodoToSP(_todos);
+    todoItem = todoItem?.copyWith(
+        name: name, description: description, checked: false, isEdit: isEdit);
   }
 
   @action

@@ -7,6 +7,7 @@ import 'package:to_do_list/todo.dart';
 class TodoDbService {
   static TodoDbService of(context) => Provider.of(context, listen: false);
   static const _todoKey = "todoList";
+
   void addTodoToSP(List<Todo> todos) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(_todoKey, encode(todos));
