@@ -15,11 +15,10 @@ class DetailedTaskStore extends _DetailedTaskStore with _$DetailedTaskStore {
 abstract class _DetailedTaskStore with Store {
   _DetailedTaskStore({required this.todoDbService, required this.id});
   @observable
-  var isLoading = true;
-  final TodoDbService todoDbService;
+  TodoDbService todoDbService;
   final String id;
   @observable
-  late Todo todoItem;
+  Todo? todoItem;
   @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();
 
@@ -28,13 +27,12 @@ abstract class _DetailedTaskStore with Store {
     final todoList = await todoDbService.getTodoFromSF();
     _todos.addAll(todoList);
     todoItem = _getToDoById(id);
-    isLoading = false;
   }
 
   @action
   void handleTodoChange() {
     _todos[_getToDoIndexById(id)] =
-        todoItem.copyWith(checked: !todoItem.checked);
+        todoItem!.copyWith(checked: !todoItem!.checked);
     todoDbService.addTodoToSP(_todos);
   }
 
