@@ -47,63 +47,68 @@ class _DetailedTaskScreen extends State<DetailedTaskScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return Column(
-            children: [
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (todoItem.isEdit)
+                        TextField(controller: nameTextFieldController)
+                      else
+                        Text(
+                          todoItem.name,
+                          style: _getTextStyle(todoItem.checked),
+                        ),
+                      if (todoItem.isEdit)
+                        TextField(controller: descriptionTextFieldController)
+                      else
+                        Text(
+                          todoItem.description,
+                          style: _getTextStyle(todoItem.checked),
+                        ),
+                    ]),
+                Row(
                   children: [
-                    if (todoItem.isEdit)
-                      TextField(controller: nameTextFieldController)
-                    else
-                      Text(
-                        todoItem.name,
-                        style: _getTextStyle(todoItem.checked),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          DetailedTaskStore.of(context).handleTodoChange();
+                        },
+                        child: const Text(
+                          'mark as ready',
+                          style: TextStyle(fontSize: 14),
+                        ),
                       ),
-                    if (todoItem.isEdit)
-                      TextField(controller: descriptionTextFieldController)
-                    else
-                      Text(
-                        todoItem.description,
-                        style: _getTextStyle(todoItem.checked),
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          DetailedTaskStore.of(context).editTodoItem(
+                              nameTextFieldController.text,
+                              descriptionTextFieldController.text,
+                              !todoItem.isEdit);
+                        },
+                        child: const Text('edit'),
                       ),
-                  ]),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        DetailedTaskStore.of(context).handleTodoChange();
-                      },
-                      child: const Text('mark as ready'),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        DetailedTaskStore.of(context).editTodoItem(
-                            nameTextFieldController.text,
-                            descriptionTextFieldController.text,
-                            !todoItem.isEdit);
-                      },
-                      child: const Text('edit'),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.go('/');
-                        DetailedTaskStore.of(context).deleteTodoItem();
-                      },
-                      child: const Text('delete'),
-                    ),
-                  )
-                ],
-              )
-            ],
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.go('/');
+                          DetailedTaskStore.of(context).deleteTodoItem();
+                        },
+                        child: const Text('delete'),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           );
         },
       ),

@@ -42,33 +42,35 @@ class TodoApp extends StatelessWidget {
                   child: const TodoList(),
                 );
               },
-            ),
-            GoRoute(
-              name: 'detailed_task_screen',
-              path: '/detailed_task_screen',
-              builder: (BuildContext context, GoRouterState state) {
-                //  String index = state.extra as String;
-                final todoItemId = state.queryParams["id"];
-                return Provider(
-                  create: (context) => DetailedTaskStore(
-                    todoDbService: TodoDbService.of(context),
-                    id: todoItemId!,
-                  ),
-                  child: DetailedTaskScreen(),
-                );
-              },
-            ),
-            GoRoute(
-              name: 'todo_history_list',
-              path: '/todo_history_list',
-              builder: (BuildContext context, GoRouterState state) {
-                return Provider(
-                  create: (context) => TodoHistoryStore(
-                    todoHistoryDbService: TodoHistoryDbService.of(context),
-                  ),
-                  child: const TodoHistoryList(),
-                );
-              },
+              routes: [
+                GoRoute(
+                  name: 'detailed_task_screen',
+                  path: 'detailed_task_screen',
+                  builder: (BuildContext context, GoRouterState state) {
+                    //  String index = state.extra as String;
+                    final todoItemId = state.queryParams["id"];
+                    return Provider(
+                      create: (context) => DetailedTaskStore(
+                        todoDbService: TodoDbService.of(context),
+                        id: todoItemId!,
+                      ),
+                      child: DetailedTaskScreen(),
+                    );
+                  },
+                ),
+                GoRoute(
+                  name: 'todo_history_list',
+                  path: 'todo_history_list',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return Provider(
+                      create: (context) => TodoHistoryStore(
+                        todoHistoryDbService: TodoHistoryDbService.of(context),
+                      ),
+                      child: const TodoHistoryList(),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),

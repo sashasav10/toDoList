@@ -45,25 +45,22 @@ class _TodoListState extends State<TodoList> {
         ],
       ),
       body: Observer(
-        builder: (_) => SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Align(
-            alignment: Alignment.center,
-            child: Wrap(
-              direction: Axis.horizontal,
-              alignment: WrapAlignment.start,
-              spacing: 5.0,
-              runSpacing: 5.0,
-              children: TodoStore.of(context)
-                  .todos
-                  .map((item) => TodoItem(
-                        todo: item,
-                        onTodoChanged: TodoStore.of(context).handleTodoChange,
-                        todoDelete: TodoStore.of(context).deleteTodoItem,
-                        todoEdit: TodoStore.of(context).editTodoItem,
-                      ))
-                  .toList()
-                  .cast<Widget>(),
+        builder: (_) => Padding(
+          padding: const EdgeInsets.all(16),
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: MediaQuery.of(context).size.width /
+                  (MediaQuery.of(context).size.height / 1.5),
+              crossAxisCount: 2,
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 4,
+            ),
+            itemCount: TodoStore.of(context).todos.length,
+            itemBuilder: (context, index) => TodoItem(
+              todo: TodoStore.of(context).todos[index],
+              onTodoChanged: TodoStore.of(context).handleTodoChange,
+              todoDelete: TodoStore.of(context).deleteTodoItem,
+              todoEdit: TodoStore.of(context).editTodoItem,
             ),
           ),
         ),
@@ -86,11 +83,11 @@ class _TodoListState extends State<TodoList> {
 
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Add a new todo item'),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
