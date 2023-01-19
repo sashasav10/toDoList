@@ -2,7 +2,8 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 
-import '../services/todo_db_service.dart';
+import '../../services/todo_db_service.dart';
+import '../../services/todo_history_db_service.dart';
 
 part 'detailed_task_store.g.dart';
 
@@ -20,13 +21,18 @@ abstract class _DetailedTaskStore with Store {
   @observable
   Todo? todoItem;
   @observable
+  bool isLoading = false;
+  @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();
 
   @action
   Future<void> init() async {
+    isLoading = true;
     final todoList = await todoDbService.getTodoFromSF();
     _todos.addAll(todoList);
     todoItem = _getToDoById(id);
+    await Future.delayed(const Duration(seconds: 1));
+    isLoading = false;
   }
 
   void updateDBService() async {
@@ -49,12 +55,6 @@ abstract class _DetailedTaskStore with Store {
   void editTodoItem(String name, String description, bool isEdit) {
     todoItem = todoItem?.copyWith(
         name: name, description: description, checked: false, isEdit: isEdit);
-  }
-
-  @action
-  void deleteDoneTodoItems() {
-    _todos.removeWhere((element) => element.checked == true);
-    todoDbService.addTodoToSP(_todos);
   }
 
   int _getToDoIndexById(String id) {

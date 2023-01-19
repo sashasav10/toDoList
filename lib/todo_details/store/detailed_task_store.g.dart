@@ -41,6 +41,22 @@ mixin _$DetailedTaskStore on _DetailedTaskStore, Store {
     });
   }
 
+  late final _$isLoadingAtom =
+      Atom(name: '_DetailedTaskStore.isLoading', context: context);
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   late final _$_todosAtom =
       Atom(name: '_DetailedTaskStore._todos', context: context);
 
@@ -102,21 +118,11 @@ mixin _$DetailedTaskStore on _DetailedTaskStore, Store {
   }
 
   @override
-  void deleteDoneTodoItems() {
-    final _$actionInfo = _$_DetailedTaskStoreActionController.startAction(
-        name: '_DetailedTaskStore.deleteDoneTodoItems');
-    try {
-      return super.deleteDoneTodoItems();
-    } finally {
-      _$_DetailedTaskStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 todoDbService: ${todoDbService},
-todoItem: ${todoItem}
+todoItem: ${todoItem},
+isLoading: ${isLoading}
     ''';
   }
 }

@@ -31,6 +31,21 @@ class TodoItem extends StatelessWidget {
     );
   }
 
+  TextStyle? _getTitleTextStyle(bool checked) {
+    if (!checked) {
+      return const TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+      );
+    } else {
+      return const TextStyle(
+        color: Colors.black,
+        decoration: TextDecoration.lineThrough,
+        fontWeight: FontWeight.bold,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final id = todo.id;
@@ -40,62 +55,78 @@ class TodoItem extends StatelessWidget {
           'detailed_task_screen',
           queryParams: {"id": id},
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(children: [
-            Checkbox(
-              checkColor: Colors.white,
-              value: todo.checked,
-              onChanged: (bool? value) {
-                onTodoChanged(todo);
-              },
-            ),
-            Expanded(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: Container(
+          width: MediaQuery.of(context).size.width / 2.1,
+          height: MediaQuery.of(context).size.height / 5,
+          color: Colors.black12,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
                   children: [
                     if (todo.isEdit)
-                      Expanded(
-                          child: TextField(controller: nameTextFieldController))
+                      TextField(controller: nameTextFieldController)
                     else
-                      Expanded(
-                        child: Text(
-                          todo.name,
-                          style: _getTextStyle(todo.checked),
-                        ),
+                      Text(
+                        todo.name,
+                        style: _getTitleTextStyle(todo.checked),
                       ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     if (todo.isEdit)
-                      Expanded(
-                          child: TextField(
-                              controller: descriptionTextFieldController))
+                      TextField(controller: descriptionTextFieldController)
                     else
-                      Expanded(
-                        child: Text(
-                          todo.description,
-                          style: _getTextStyle(todo.checked),
-                        ),
+                      Text(
+                        todo.description,
+                        style: _getTextStyle(todo.checked),
                       ),
-                  ]),
+                  ],
+                ),
+                Column(
+                  children: [
+                    const Divider(
+                      thickness: 2,
+                      color: Colors.black,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          value: todo.checked,
+                          onChanged: (bool? value) {
+                            onTodoChanged(todo);
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.account_balance_wallet,
+                              size: 16),
+                          onPressed: () {
+                            todoEdit(
+                              todo.id,
+                              nameTextFieldController.text,
+                              descriptionTextFieldController.text,
+                              !todo.isEdit,
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete, size: 16),
+                          onPressed: () {
+                            todoDelete(todo.id);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
-            IconButton(
-              icon: const Icon(Icons.account_balance_wallet, size: 16),
-              onPressed: () {
-                todoEdit(
-                  todo.id,
-                  nameTextFieldController.text,
-                  descriptionTextFieldController.text,
-                  !todo.isEdit,
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete, size: 16),
-              onPressed: () {
-                todoDelete(todo.id);
-              },
-            ),
-          ]),
+          ),
         ),
       ),
     );

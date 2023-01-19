@@ -1,11 +1,9 @@
 import 'dart:async';
-
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
-import 'package:to_do_list/todo_list/todo_list_store.dart';
+import 'package:to_do_list/todo_list/store/todo_list_store.dart';
 import 'package:to_do_list/todo_list/todo_item.dart';
-import 'package:uuid/uuid.dart';
 
 class TodoList extends StatefulWidget {
   const TodoList({super.key});
@@ -34,24 +32,47 @@ class _TodoListState extends State<TodoList> {
             Icons.auto_delete_outlined,
           ),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.history),
+            tooltip: 'Show history',
+            onPressed: () {
+              context.goNamed(
+                'todo_history_list',
+              );
+            },
+          ),
+        ],
       ),
       body: Observer(
-        builder: (_) => ListView.builder(
-          itemCount: TodoStore.of(context).todos.length,
-          itemBuilder: (context, index) {
-            return TodoItem(
-              todo: TodoStore.of(context).todos[index],
-              onTodoChanged: TodoStore.of(context).handleTodoChange,
-              todoDelete: TodoStore.of(context).deleteTodoItem,
-              todoEdit: TodoStore.of(context).editTodoItem,
-            );
-          },
+        builder: (_) => SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Align(
+            alignment: Alignment.center,
+            child: Wrap(
+              direction: Axis.horizontal,
+              alignment: WrapAlignment.start,
+              spacing: 5.0,
+              runSpacing: 5.0,
+              children: TodoStore.of(context)
+                  .todos
+                  .map((item) => TodoItem(
+                        todo: item,
+                        onTodoChanged: TodoStore.of(context).handleTodoChange,
+                        todoDelete: TodoStore.of(context).deleteTodoItem,
+                        todoEdit: TodoStore.of(context).editTodoItem,
+                      ))
+                  .toList()
+                  .cast<Widget>(),
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => _displayAddDialog(TodoStore.of(context).addTodoItem),
-          tooltip: 'Add Task',
-          child: const Icon(Icons.add)),
+        onPressed: () => _displayAddDialog(TodoStore.of(context).addTodoItem),
+        tooltip: 'Add Task',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
@@ -69,23 +90,20 @@ class _TodoListState extends State<TodoList> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Add a new todo item'),
-          content: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  controller: nameTextFieldController,
-                  decoration:
-                      const InputDecoration(hintText: 'Type name of new todo'),
-                ),
-                TextField(
-                  controller: descriptionTextFieldController,
-                  decoration:
-                      const InputDecoration(hintText: 'Type description'),
-                ),
-              ],
-            ),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: nameTextFieldController,
+                decoration:
+                    const InputDecoration(hintText: 'Type name of new todo'),
+              ),
+              TextField(
+                controller: descriptionTextFieldController,
+                decoration: const InputDecoration(hintText: 'Type description'),
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(

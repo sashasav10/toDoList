@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
-import 'package:to_do_list/todo_details/detailed_task_store.dart';
+import 'package:to_do_list/todo_details/store/detailed_task_store.dart';
 
 import '../todo.dart';
 
@@ -41,7 +41,12 @@ class _DetailedTaskScreen extends State<DetailedTaskScreen> {
       ),
       body: Observer(
         builder: (_) {
-          Todo todoItem = DetailedTaskStore.of(context).todoItem!;
+          final todoItem = DetailedTaskStore.of(context).todoItem;
+          final isLoading = DetailedTaskStore.of(context).isLoading;
+          if (isLoading || todoItem == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           return Column(
             children: [
               Column(
