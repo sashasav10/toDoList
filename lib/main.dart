@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/services/todo_db_service.dart';
-import 'package:to_do_list/services/todo_history_db_service.dart';
 import 'package:to_do_list/todo_details/store/detailed_task_store.dart';
 import 'package:to_do_list/todo_history/store/todo_history_list_store.dart';
-import 'package:to_do_list/todo_history/todo_history_list.dart';
+import 'package:to_do_list/todo_history/todo_history_screen.dart';
 import 'package:to_do_list/todo_list/store/todo_list_store.dart';
-import 'package:to_do_list/todo_list/todoList.dart';
+import 'package:to_do_list/todo_list/todo_list_screen.dart';
 import 'package:uuid/uuid.dart';
 
 import 'todo_details/detailed_task_screen.dart';
@@ -23,8 +22,6 @@ class TodoApp extends StatelessWidget {
       providers: [
         Provider<Uuid>(create: (context) => const Uuid()),
         Provider<TodoDbService>(create: (context) => TodoDbService()),
-        Provider<TodoHistoryDbService>(
-            create: (context) => TodoHistoryDbService()),
       ],
       builder: (context, child) => MaterialApp.router(
         routerConfig: GoRouter(
@@ -37,38 +34,39 @@ class TodoApp extends StatelessWidget {
                   create: (context) => TodoStore(
                     uuid: Provider.of<Uuid>(context, listen: false),
                     todoDbService: TodoDbService.of(context),
-                    todoHistoryDbService: TodoHistoryDbService.of(context),
                   ),
                   child: const TodoList(),
                 );
               },
-            ),
-            GoRoute(
-              name: 'detailed_task_screen',
-              path: '/detailed_task_screen',
-              builder: (BuildContext context, GoRouterState state) {
-                //  String index = state.extra as String;
-                final todoItemId = state.queryParams["id"];
-                return Provider(
-                  create: (context) => DetailedTaskStore(
-                    todoDbService: TodoDbService.of(context),
-                    id: todoItemId!,
-                  ),
-                  child: DetailedTaskScreen(),
-                );
-              },
-            ),
-            GoRoute(
-              name: 'todo_history_list',
-              path: '/todo_history_list',
-              builder: (BuildContext context, GoRouterState state) {
-                return Provider(
-                  create: (context) => TodoHistoryStore(
-                    todoHistoryDbService: TodoHistoryDbService.of(context),
-                  ),
-                  child: const TodoHistoryList(),
-                );
-              },
+              routes: [
+                GoRoute(
+                  name: 'detailed_task_screen',
+                  path: 'detailed_task_screen',
+                  builder: (BuildContext context, GoRouterState state) {
+                    //  String index = state.extra as String;
+                    final todoItemId = state.queryParams["id"];
+                    return Provider(
+                      create: (context) => DetailedTaskStore(
+                        todoDbService: TodoDbService.of(context),
+                        id: todoItemId!,
+                      ),
+                      child: DetailedTaskScreen(),
+                    );
+                  },
+                ),
+                GoRoute(
+                  name: 'todo_history_list',
+                  path: 'todo_history_list',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return Provider(
+                      create: (context) => TodoHistoryStore(
+                        todoDbService: TodoDbService.of(context),
+                      ),
+                      child: const TodoHistoryList(),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),

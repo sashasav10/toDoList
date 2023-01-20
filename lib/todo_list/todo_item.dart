@@ -7,6 +7,7 @@ class TodoItem extends StatelessWidget {
       {required this.todo,
       required this.onTodoChanged,
       required this.todoDelete,
+      required this.deleteDoneTodoItems,
       required this.todoEdit})
       : super(key: ObjectKey(todo)) {
     nameTextFieldController.text = todo.name;
@@ -16,6 +17,7 @@ class TodoItem extends StatelessWidget {
   final Todo todo;
   final Function onTodoChanged;
   final Function todoDelete;
+  final Function deleteDoneTodoItems;
   final Function todoEdit;
 
   final TextEditingController nameTextFieldController = TextEditingController();
@@ -51,21 +53,24 @@ class TodoItem extends StatelessWidget {
     final id = todo.id;
     return IntrinsicHeight(
       child: GestureDetector(
-        onTap: () => context.goNamed(
-          'detailed_task_screen',
-          queryParams: {"id": id},
-        ),
-        child: Container(
-          width: MediaQuery.of(context).size.width / 2.1,
-          height: MediaQuery.of(context).size.height / 5,
-          color: Colors.black12,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
+        onTap: () {
+          if (!todo.isEdit) {
+            context.goNamed(
+              'detailed_task_screen',
+              queryParams: {"id": id},
+            );
+          }
+        },
+        child: Card(
+          elevation: 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (todo.isEdit)
                       TextField(controller: nameTextFieldController)
@@ -73,6 +78,8 @@ class TodoItem extends StatelessWidget {
                       Text(
                         todo.name,
                         style: _getTitleTextStyle(todo.checked),
+                        overflow: TextOverflow.fade,
+                        maxLines: 2,
                       ),
                     const SizedBox(
                       height: 10,
@@ -83,49 +90,55 @@ class TodoItem extends StatelessWidget {
                       Text(
                         todo.description,
                         style: _getTextStyle(todo.checked),
+                        overflow: TextOverflow.fade,
+                        maxLines: 4,
                       ),
                   ],
                 ),
-                Column(
-                  children: [
-                    const Divider(
-                      thickness: 2,
-                      color: Colors.black,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Checkbox(
-                          checkColor: Colors.white,
-                          value: todo.checked,
-                          onChanged: (bool? value) {
-                            onTodoChanged(todo);
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.account_balance_wallet,
-                              size: 16),
-                          onPressed: () {
-                            todoEdit(
-                              todo.id,
-                              nameTextFieldController.text,
-                              descriptionTextFieldController.text,
-                              !todo.isEdit,
-                            );
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, size: 16),
-                          onPressed: () {
+              ),
+              Column(
+                children: [
+                  const Divider(
+                    thickness: 0,
+                    height: 0,
+                    color: Colors.black,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Checkbox(
+                        checkColor: Colors.white,
+                        value: todo.checked,
+                        onChanged: (bool? value) {
+                          onTodoChanged(todo);
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.edit, size: 16),
+                        onPressed: () {
+                          todoEdit(
+                            todo.id,
+                            nameTextFieldController.text,
+                            descriptionTextFieldController.text,
+                            !todo.isEdit,
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete, size: 16),
+                        onPressed: () {
+                          if (todo.checked) {
+                            deleteDoneTodoItems();
+                          } else {
                             todoDelete(todo.id);
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

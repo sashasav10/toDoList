@@ -85,11 +85,11 @@ mixin _$DetailedTaskStore on _DetailedTaskStore, Store {
       ActionController(name: '_DetailedTaskStore', context: context);
 
   @override
-  void handleTodoChange() {
+  void changeAsMarked() {
     final _$actionInfo = _$_DetailedTaskStoreActionController.startAction(
-        name: '_DetailedTaskStore.handleTodoChange');
+        name: '_DetailedTaskStore.changeAsMarked');
     try {
-      return super.handleTodoChange();
+      return super.changeAsMarked();
     } finally {
       _$_DetailedTaskStoreActionController.endAction(_$actionInfo);
     }
@@ -112,6 +112,17 @@ mixin _$DetailedTaskStore on _DetailedTaskStore, Store {
         name: '_DetailedTaskStore.editTodoItem');
     try {
       return super.editTodoItem(name, description, isEdit);
+    } finally {
+      _$_DetailedTaskStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deleteDoneTodoItems() {
+    final _$actionInfo = _$_DetailedTaskStoreActionController.startAction(
+        name: '_DetailedTaskStore.deleteDoneTodoItems');
+    try {
+      return super.deleteDoneTodoItems();
     } finally {
       _$_DetailedTaskStoreActionController.endAction(_$actionInfo);
     }

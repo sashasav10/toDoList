@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:to_do_list/todo_history/store/todo_history_list_store.dart';
 import 'package:to_do_list/todo_history/todo_history_item.dart';
-import 'package:to_do_list/todo_list/todo_item.dart';
 import 'package:go_router/go_router.dart';
+
+import '../todo_list/todo_list_screen.dart';
 
 class TodoHistoryList extends StatefulWidget {
   const TodoHistoryList({super.key});
@@ -32,21 +33,30 @@ class _TodoHistoryListState extends State<TodoHistoryList> {
             Icons.arrow_back,
           ),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.delete_forever),
+            tooltip: 'Delete all',
+            onPressed: () {
+              TodoHistoryStore.of(context).deleteHistoryTodoItems();
+            },
+          ),
+        ],
       ),
       body: Observer(
-        builder: (_) => SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Wrap(
-            direction: Axis.horizontal,
-            alignment: WrapAlignment.start,
-            spacing: 5.0,
-            runSpacing: 5.0,
-            children: TodoHistoryStore.of(context)
-                .todos
-                .map((item) => TodoHistoryItem(todo: item))
-                .toList()
-                .cast<Widget>(),
-          ),
+        builder: (_) => Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    (MediaQuery.of(context).size.height / 1.5),
+                crossAxisCount: 2,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4,
+              ),
+              itemCount: TodoHistoryStore.of(context).todos.length,
+              itemBuilder: (context, index) => TodoHistoryItem(
+                  todo: TodoHistoryStore.of(context).todos[index])),
         ),
       ),
     );

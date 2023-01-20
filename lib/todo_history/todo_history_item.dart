@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:to_do_list/todo.dart';
 
 class TodoHistoryItem extends StatelessWidget {
@@ -16,45 +15,51 @@ class TodoHistoryItem extends StatelessWidget {
   final TextEditingController descriptionTextFieldController =
       TextEditingController();
 
-  TextStyle? _getTextStyle(bool checked) {
-    if (!checked) return null;
-
-    return const TextStyle(
-      color: Colors.black54,
-      decoration: TextDecoration.lineThrough,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final id = todo.id;
     return IntrinsicHeight(
-      child: Container(
-        width: MediaQuery.of(context).size.width / 2.1,
-        height: MediaQuery.of(context).size.height / 5,
-        color: Colors.black26,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (todo.isEdit)
-                TextField(controller: nameTextFieldController)
-              else
-                Text(
-                  todo.name,
-                  style: _getTextStyle(todo.checked),
+      child: Card(
+        elevation: 5,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                if (todo.isEdit)
+                  TextField(controller: nameTextFieldController)
+                else
+                  Text(
+                    todo.name,
+                    overflow: TextOverflow.fade,
+                    maxLines: 2,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                const SizedBox(
+                  height: 10,
                 ),
-              if (todo.isEdit)
-                TextField(controller: descriptionTextFieldController)
-              else
-                Text(
-                  todo.description,
-                  style: _getTextStyle(todo.checked),
-                ),
-            ],
-          ),
+                if (todo.isEdit)
+                  TextField(controller: descriptionTextFieldController)
+                else
+                  Text(
+                    todo.description,
+                    overflow: TextOverflow.fade,
+                    maxLines: 4,
+                  ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 40.0),
+              child: Divider(
+                thickness: 0,
+                height: 0,
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
       ),
     );

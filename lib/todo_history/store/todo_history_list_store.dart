@@ -1,23 +1,21 @@
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
-import 'package:uuid/uuid.dart';
-
 import '../../services/todo_db_service.dart';
-import '../../services/todo_history_db_service.dart';
 
 part 'todo_history_list_store.g.dart';
 
 class TodoHistoryStore extends _TodoHistoryStore with _$TodoHistoryStore {
-  TodoHistoryStore({required super.todoHistoryDbService});
+  TodoHistoryStore({required super.todoDbService});
 
   static TodoHistoryStore of(context) => Provider.of(context, listen: false);
 }
 
 abstract class _TodoHistoryStore with Store {
-  _TodoHistoryStore({required this.todoHistoryDbService});
+  _TodoHistoryStore({required this.todoDbService});
 
-  final TodoHistoryDbService todoHistoryDbService;
+  final TodoDbService todoDbService;
+
   @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();
 
@@ -26,7 +24,7 @@ abstract class _TodoHistoryStore with Store {
   @action
   Future<void> init() async {
     _todos.addAll(
-      await todoHistoryDbService.getTodoFromSF(),
+      await todoDbService.getHistoryTodoFromSF(),
     );
   }
 
@@ -35,7 +33,13 @@ abstract class _TodoHistoryStore with Store {
     _todos.add(
       Todo(id: id, name: name, description: description, checked: true),
     );
-    todoHistoryDbService.addTodoToSP(_todos);
+    todoDbService.addHistoryTodoToSP(_todos);
+  }
+
+  @action
+  void deleteHistoryTodoItems() {
+    _todos.clear();
+    todoDbService.addHistoryTodoToSP(_todos);
   }
 
   int getToDoIndexById(String id) {

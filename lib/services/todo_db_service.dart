@@ -7,6 +7,7 @@ import 'package:to_do_list/todo.dart';
 class TodoDbService {
   static TodoDbService of(context) => Provider.of(context, listen: false);
   static const _todoKey = "todoList";
+  static const _todoHistoryKey = "todoHistoryList";
 
   void addTodoToSP(List<Todo> todos) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -18,6 +19,18 @@ class TodoDbService {
     String? todoString = prefs.getString(_todoKey);
     if (todoString == null) return [];
     return await decode(todoString);
+  }
+
+  void addHistoryTodoToSP(List<Todo> todos) async {
+    SharedPreferences prefsHistory = await SharedPreferences.getInstance();
+    prefsHistory.setString(_todoHistoryKey, encode(todos));
+  }
+
+  Future<List<Todo>> getHistoryTodoFromSF() async {
+    SharedPreferences prefsHistory = await SharedPreferences.getInstance();
+    String? todoHistoryString = prefsHistory.getString(_todoHistoryKey);
+    if (todoHistoryString == null) return [];
+    return await decode(todoHistoryString);
   }
 
   String encode(List<Todo> todos) => json.encode(

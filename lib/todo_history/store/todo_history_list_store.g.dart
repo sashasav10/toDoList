@@ -48,6 +48,17 @@ mixin _$TodoHistoryStore on _TodoHistoryStore, Store {
   }
 
   @override
+  void deleteHistoryTodoItems() {
+    final _$actionInfo = _$_TodoHistoryStoreActionController.startAction(
+        name: '_TodoHistoryStore.deleteHistoryTodoItems');
+    try {
+      return super.deleteHistoryTodoItems();
+    } finally {
+      _$_TodoHistoryStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 
