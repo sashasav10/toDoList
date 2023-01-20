@@ -137,9 +137,6 @@ class _TodoListState extends State<TodoList> {
               child: const Text('Add'),
               onPressed: () {
                 if (_formKeyValidate.currentState!.validate()) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
                   Navigator.of(context).pop();
                   onCreate(
                     nameTextFieldController.text,
