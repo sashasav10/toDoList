@@ -67,6 +67,18 @@ class TodoItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              GestureDetector(
+                onTap: () => {
+                  context.goNamed(
+                    'set_photo_screen',
+                  )
+                },
+                child: const Center(
+                    child: Icon(
+                  Icons.photo,
+                  size: 100,
+                )),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

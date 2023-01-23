@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do_list/services/image_api_service.dart';
 import 'package:to_do_list/services/todo_db_service.dart';
+import 'package:to_do_list/set_photo/set_photo_screen.dart';
+import 'package:to_do_list/set_photo/store/image_store.dart';
 import 'package:to_do_list/todo_details/store/detailed_task_store.dart';
 import 'package:to_do_list/todo_history/store/todo_history_list_store.dart';
 import 'package:to_do_list/todo_history/todo_history_screen.dart';
@@ -22,6 +25,7 @@ class TodoApp extends StatelessWidget {
       providers: [
         Provider<Uuid>(create: (context) => const Uuid()),
         Provider<TodoDbService>(create: (context) => TodoDbService()),
+        Provider<ImageApiService>(create: (context) => ImageApiService()),
       ],
       builder: (context, child) => MaterialApp.router(
         routerConfig: GoRouter(
@@ -63,6 +67,18 @@ class TodoApp extends StatelessWidget {
                         todoDbService: TodoDbService.of(context),
                       ),
                       child: const TodoHistoryList(),
+                    );
+                  },
+                ),
+                GoRoute(
+                  name: 'set_photo_screen',
+                  path: 'set_photo_screen',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return Provider(
+                      create: (context) => ImageStore(
+                        imageApiService: ImageApiService.of(context),
+                      ),
+                      child: const SetPhotoScreen(),
                     );
                   },
                 ),
