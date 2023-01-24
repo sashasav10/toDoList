@@ -5,6 +5,7 @@ class Todo {
     required this.description,
     required this.checked,
     this.isEdit = false,
+    this.photo = "https://cdn-icons-png.flaticon.com/512/1/1560.png",
   });
 
   final String id;
@@ -12,6 +13,7 @@ class Todo {
   final String description;
   final bool checked;
   final bool isEdit;
+  final String photo;
 
   Todo? copyWith({
     String? id,
@@ -19,6 +21,7 @@ class Todo {
     String? description,
     bool? checked,
     bool? isEdit,
+    String? photo,
   }) =>
       Todo(
         id: id ?? this.id,
@@ -26,6 +29,7 @@ class Todo {
         description: description ?? this.description,
         checked: checked ?? this.checked,
         isEdit: isEdit ?? this.isEdit,
+        photo: photo ?? this.photo,
       );
 
   static fromJson(Map<String, dynamic> jsonData) {
@@ -35,6 +39,7 @@ class Todo {
       description: jsonData['description'],
       checked: jsonData['checked'],
       isEdit: jsonData['isEdit'],
+      photo: jsonData['photo'],
     );
   }
 
@@ -44,5 +49,6 @@ class Todo {
         'description': todo.description,
         'checked': todo.checked,
         'isEdit': todo.isEdit,
+        'photo': todo.photo,
       };
 }

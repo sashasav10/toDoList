@@ -11,19 +11,20 @@ class TodoStore extends _TodoStore with _$TodoStore {
   TodoStore({
     required super.uuid,
     required super.todoDbService,
+    super.updateNeed,
   });
 
   static TodoStore of(context) => Provider.of(context, listen: false);
 }
 
 abstract class _TodoStore with Store {
-  _TodoStore({
-    required this.uuid,
-    required this.todoDbService,
-  });
+  _TodoStore(
+      {required this.uuid, required this.todoDbService, this.updateNeed});
 
   final Uuid uuid;
   final TodoDbService todoDbService;
+  @observable
+  bool? updateNeed;
 
   @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();

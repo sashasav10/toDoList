@@ -16,7 +16,6 @@ class SetPhotoScreen extends StatefulWidget {
 
 class _SetPhotoScreenState extends State<SetPhotoScreen> {
   final TextEditingController searchFieldController = TextEditingController();
-  late ImageResult images;
   // Future<ImageResult> getImages() async {
   //   Dio dio = Dio();
   //   Response<dynamic> response = await dio.get(
@@ -34,7 +33,7 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
   @override
   void initState() {
     super.initState();
-    images = ImageStore.of(context).images!;
+    ImageStore.of(context).init();
   }
 
   @override
@@ -44,8 +43,10 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
         title: const Text('Set photo'),
         leading: GestureDetector(
           onTap: () {
-            DetailedTaskStore.of(context).updateDB();
-            context.go('/');
+            context.goNamed(
+              '/',
+              queryParams: {"updateNeed": "true"},
+            );
           },
           child: const Icon(
             Icons.arrow_back,
@@ -54,24 +55,71 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
       ),
       body: Observer(
         builder: (_) {
+          final images = ImageStore.of(context).images;
+          if (images == null) {
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: searchFieldController,
+                        decoration: const InputDecoration(
+                            hintText: 'Search photo for icon'),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.search),
+                      iconSize: 40,
+                      onPressed: () {
+                        ImageStore.of(context)
+                            .searchByPressedButton(searchFieldController.text);
+                      },
+                    ),
+                  ],
+                ),
+                const Text("No images have found, please search another one"),
+              ],
+            );
+          }
+
           return Column(
             children: [
-              TextFormField(
-                controller: searchFieldController,
-                decoration:
-                    const InputDecoration(hintText: 'Search photo for icon'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: searchFieldController,
+                      decoration: const InputDecoration(
+                          hintText: 'Search photo for icon'),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    iconSize: 40,
+                    onPressed: () {
+                      ImageStore.of(context)
+                          .searchByPressedButton(searchFieldController.text);
+                    },
+                  )
+                ],
               ),
-              GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 1.5),
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 4,
-                  crossAxisSpacing: 4,
-                ),
-                itemCount: images.value.length,
-                itemBuilder: (context, index) => PhotoItem(
-                  image: images.value[index].contentUrl,
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: MediaQuery.of(context).size.width /
+                        (MediaQuery.of(context).size.height / 2),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
+                  ),
+                  itemCount: images.value.length,
+                  itemBuilder: (context, index) => PhotoItem(
+                    image: images.value[index].contentUrl,
+                    setPhoto: ImageStore.of(context).setPhoto,
+                  ),
                 ),
               ),
             ],

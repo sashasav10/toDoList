@@ -32,12 +32,15 @@ class TodoApp extends StatelessWidget {
           initialLocation: '/',
           routes: <RouteBase>[
             GoRoute(
+              name: '/',
               path: '/',
               builder: (BuildContext context, GoRouterState state) {
+                final updateNeed = state.extra as bool?;
                 return Provider(
                   create: (context) => TodoStore(
                     uuid: Provider.of<Uuid>(context, listen: false),
                     todoDbService: TodoDbService.of(context),
+                    updateNeed: updateNeed,
                   ),
                   child: const TodoList(),
                 );
@@ -74,9 +77,12 @@ class TodoApp extends StatelessWidget {
                   name: 'set_photo_screen',
                   path: 'set_photo_screen',
                   builder: (BuildContext context, GoRouterState state) {
+                    final todoItemId = state.queryParams["id"];
                     return Provider(
                       create: (context) => ImageStore(
                         imageApiService: ImageApiService.of(context),
+                        todoId: todoItemId!,
+                        todoDbService: TodoDbService.of(context),
                       ),
                       child: const SetPhotoScreen(),
                     );

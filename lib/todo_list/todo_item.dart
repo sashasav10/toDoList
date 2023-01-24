@@ -71,13 +71,15 @@ class TodoItem extends StatelessWidget {
                 onTap: () => {
                   context.goNamed(
                     'set_photo_screen',
+                    queryParams: {"id": id},
                   )
                 },
-                child: const Center(
-                    child: Icon(
-                  Icons.photo,
-                  size: 100,
-                )),
+                child: Center(
+                  child: Image.network(
+                    todo.photo,
+                    height: 100,
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
