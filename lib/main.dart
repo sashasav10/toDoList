@@ -35,32 +35,15 @@ class TodoApp extends StatelessWidget {
               name: '/',
               path: '/',
               builder: (BuildContext context, GoRouterState state) {
-                final updateNeed = state.extra as bool?;
                 return Provider(
                   create: (context) => TodoStore(
                     uuid: Provider.of<Uuid>(context, listen: false),
                     todoDbService: TodoDbService.of(context),
-                    updateNeed: updateNeed,
                   ),
                   child: const TodoList(),
                 );
               },
               routes: [
-                GoRoute(
-                  name: 'detailed_task_screen',
-                  path: 'detailed_task_screen',
-                  builder: (BuildContext context, GoRouterState state) {
-                    //  String index = state.extra as String;
-                    final todoItemId = state.queryParams["id"];
-                    return Provider(
-                      create: (context) => DetailedTaskStore(
-                        todoDbService: TodoDbService.of(context),
-                        id: todoItemId!,
-                      ),
-                      child: DetailedTaskScreen(),
-                    );
-                  },
-                ),
                 GoRoute(
                   name: 'todo_history_list',
                   path: 'todo_history_list',
@@ -73,22 +56,37 @@ class TodoApp extends StatelessWidget {
                     );
                   },
                 ),
-                GoRoute(
-                  name: 'set_photo_screen',
-                  path: 'set_photo_screen',
-                  builder: (BuildContext context, GoRouterState state) {
-                    final todoItemId = state.queryParams["id"];
-                    return Provider(
-                      create: (context) => ImageStore(
-                        imageApiService: ImageApiService.of(context),
-                        todoId: todoItemId!,
-                        todoDbService: TodoDbService.of(context),
-                      ),
-                      child: const SetPhotoScreen(),
-                    );
-                  },
-                ),
               ],
+            ),
+            GoRoute(
+              name: 'detailed_task_screen',
+              path: '/detailed_task_screen',
+              builder: (BuildContext context, GoRouterState state) {
+                //  String index = state.extra as String;
+                final todoItemId = state.queryParams["id"];
+                return Provider(
+                  create: (context) => DetailedTaskStore(
+                    todoDbService: TodoDbService.of(context),
+                    id: todoItemId!,
+                  ),
+                  child: DetailedTaskScreen(),
+                );
+              },
+            ),
+            GoRoute(
+              name: 'set_photo_screen',
+              path: '/set_photo_screen',
+              builder: (BuildContext context, GoRouterState state) {
+                final todoItemId = state.queryParams["id"];
+                return Provider(
+                  create: (context) => ImageStore(
+                    imageApiService: ImageApiService.of(context),
+                    todoId: todoItemId!,
+                    todoDbService: TodoDbService.of(context),
+                  ),
+                  child: const SetPhotoScreen(),
+                );
+              },
             ),
           ],
         ),

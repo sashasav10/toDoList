@@ -22,12 +22,11 @@ class PhotoItem extends StatelessWidget {
             '/',
             extra: true,
           );
-          context.
         },
         child: Card(
           elevation: 5,
           child: FittedBox(
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
             child: Image.network(image),
           ),
         ),

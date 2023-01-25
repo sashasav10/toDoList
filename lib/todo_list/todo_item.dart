@@ -55,7 +55,7 @@ class TodoItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           if (!todo.isEdit) {
-            context.goNamed(
+            GoRouter.of(context).pushReplacementNamed(
               'detailed_task_screen',
               queryParams: {"id": id},
             );
@@ -69,7 +69,7 @@ class TodoItem extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () => {
-                  context.goNamed(
+                  GoRouter.of(context).pushReplacementNamed(
                     'set_photo_screen',
                     queryParams: {"id": id},
                   )

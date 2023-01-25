@@ -33,7 +33,9 @@ class _DetailedTaskScreen extends State<DetailedTaskScreen> {
         leading: GestureDetector(
           onTap: () {
             DetailedTaskStore.of(context).updateDB();
-            context.go('/');
+            GoRouter.of(context).goNamed(
+              '/',
+            );
           },
           child: const Icon(
             Icons.arrow_back,
@@ -100,7 +102,9 @@ class _DetailedTaskScreen extends State<DetailedTaskScreen> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          context.go('/');
+                          GoRouter.of(context).goNamed(
+                            '/',
+                          );
                           DetailedTaskStore.of(context).deleteTodoItem();
                         },
                         child: const Text('delete'),

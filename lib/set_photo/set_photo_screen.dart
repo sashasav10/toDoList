@@ -43,9 +43,8 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
         title: const Text('Set photo'),
         leading: GestureDetector(
           onTap: () {
-            context.goNamed(
+            GoRouter.of(context).goNamed(
               '/',
-              queryParams: {"updateNeed": "true"},
             );
           },
           child: const Icon(
