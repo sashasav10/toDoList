@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="dev" type="FlutterRunConfigurationType" factoryName="Flutter">
+        <option name="additionalArgs" value="--dart-define=imagesApiKey='b1a7f67b18msh424b6cb334a03c7p1396e6jsna22b094ae39b'" />
+        <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+        <method v="2" />
+    </configuration>
+</component>

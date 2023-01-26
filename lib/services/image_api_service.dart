@@ -7,17 +7,35 @@ class ImageApiService {
   static ImageApiService of(context) => Provider.of(context, listen: false);
 
   Future<ImageResult> getImages(String searchText) async {
-    //const imagesApiKey = String.fromEnvironment('IMAGES_API_KEY');
-    Dio dio = Dio();
+    const imagesApiKey = String.fromEnvironment('imagesApiKey');
+    BaseOptions options = BaseOptions(
+      baseUrl: Env.baseUrl,
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+    );
+    final interceptor = ApiProviderImageInterceptor();
+
+    Dio dio = Dio(options)..interceptors.add(interceptor);
     Response<dynamic> response = await dio.get(
-        "https://bing-image-search1.p.rapidapi.com/images/search?q=$searchText",
-        options: Options(
-          headers: {
-            "X-RapidAPI-Key": Env.imagesApiKey,
-            "X-RapidAPI-Host": "bing-image-search1.p.rapidapi.com"
-          },
-        ));
+      '/images/search?q=$searchText',
+    );
     print(response.data);
     return ImageResult.fromJson(response.data);
+  }
+}
+
+class ApiProviderImageInterceptor extends Interceptor {
+  @override
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    handler.next(
+      options
+        ..headers.addAll({
+          "X-RapidAPI-Key": Env.imagesApiKey,
+          "X-RapidAPI-Host": Env.apiHost,
+        }),
+    );
   }
 }
