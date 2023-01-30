@@ -37,17 +37,6 @@ mixin _$TodoHistoryStore on _TodoHistoryStore, Store {
       ActionController(name: '_TodoHistoryStore', context: context);
 
   @override
-  void addTodoItem(String id, String name, String description) {
-    final _$actionInfo = _$_TodoHistoryStoreActionController.startAction(
-        name: '_TodoHistoryStore.addTodoItem');
-    try {
-      return super.addTodoItem(id, name, description);
-    } finally {
-      _$_TodoHistoryStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void deleteHistoryTodoItems() {
     final _$actionInfo = _$_TodoHistoryStoreActionController.startAction(
         name: '_TodoHistoryStore.deleteHistoryTodoItems');

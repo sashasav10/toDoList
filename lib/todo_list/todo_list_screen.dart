@@ -8,10 +8,11 @@ import 'package:to_do_list/todo_list/store/todo_list_store.dart';
 import 'package:to_do_list/todo_list/todo_item.dart';
 import 'package:uuid/uuid.dart';
 
+import 'alert_dialog.dart';
+
 class TodoList extends StatelessWidget {
   TodoList({super.key});
   static const routeName = 'todo-list';
-  final _formKeyValidate = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class TodoList extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.hourglass_empty, size: 45),
                 onPressed: () {
-                  _displayAddDialog(
+                  AddAlertDialog().displayAddDialog(
                     TodoStore.of(context).addTodoItem,
                     context,
                   );
@@ -83,7 +84,7 @@ class TodoList extends StatelessWidget {
           );
         }),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => _displayAddDialog(
+          onPressed: () => AddAlertDialog().displayAddDialog(
             TodoStore.of(context).addTodoItem,
             context,
           ),
@@ -91,72 +92,6 @@ class TodoList extends StatelessWidget {
           child: const Icon(Icons.add),
         ),
       ),
-    );
-  }
-
-  Future<void> _displayAddDialog(
-    Function(String title, String description) onCreate,
-    BuildContext context,
-  ) async {
-    final TextEditingController nameTextFieldController =
-        TextEditingController();
-    final TextEditingController descriptionTextFieldController =
-        TextEditingController();
-
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Add a new todo item'),
-          content: Form(
-            key: _formKeyValidate,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: nameTextFieldController,
-                  decoration: const InputDecoration(
-                    hintText: 'Type name of new todo',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: descriptionTextFieldController,
-                  decoration:
-                      const InputDecoration(hintText: 'Type description'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Add'),
-              onPressed: () {
-                if (_formKeyValidate.currentState!.validate()) {
-                  Navigator.of(context).pop();
-                  onCreate(
-                    nameTextFieldController.text,
-                    descriptionTextFieldController.text,
-                  );
-                }
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

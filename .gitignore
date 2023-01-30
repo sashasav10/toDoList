@@ -13,7 +13,7 @@
 .env
 env.dart
 env.g.dart
-
+run.xml
 
 # IntelliJ related
 *.iml

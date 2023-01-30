@@ -54,14 +54,13 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final id = todo.id;
     return IntrinsicHeight(
       child: GestureDetector(
         onTap: () {
           if (!todo.isEdit) {
             Navigator.of(context).pushNamed(
               DetailedTaskScreen.routeName,
-              arguments: DetailedTaskScreenArgs(todoItemId: id),
+              arguments: DetailedTaskScreenArgs(todoItemId: todo.id),
             );
           }
         },
@@ -75,7 +74,7 @@ class TodoItem extends StatelessWidget {
                 onTap: () => {
                   Navigator.of(context).popAndPushNamed(
                     SetPhotoScreen.routeName,
-                    arguments: SetPhotoScreenArgs(todoItemId: id),
+                    arguments: SetPhotoScreenArgs(todoItemId: todo.id),
                   ),
                 },
                 child: Center(

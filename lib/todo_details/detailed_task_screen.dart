@@ -28,7 +28,6 @@ class DetailedTaskScreen extends StatelessWidget {
           title: Text("todo.name"),
           leading: GestureDetector(
             onTap: () {
-              DetailedTaskStore.of(context).updateDB();
               Navigator.of(context).popAndPushNamed(
                 TodoList.routeName,
               );
