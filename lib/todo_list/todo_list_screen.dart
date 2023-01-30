@@ -2,92 +2,101 @@ import 'dart:async';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_list/services/todo_db_service.dart';
 import 'package:to_do_list/todo_list/store/todo_list_store.dart';
 import 'package:to_do_list/todo_list/todo_item.dart';
+import 'package:uuid/uuid.dart';
 
-class TodoList extends StatefulWidget {
-  const TodoList({super.key});
-
-  @override
-  _TodoListState createState() => _TodoListState();
-}
-
-class _TodoListState extends State<TodoList> {
+class TodoList extends StatelessWidget {
+  TodoList({super.key});
+  static const routeName = 'todo-list';
   final _formKeyValidate = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    TodoStore.of(context).init();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('To Do List'),
-        leading: GestureDetector(
-          onTap: () {
-            TodoStore.of(context).deleteDoneTodoItems();
-          },
-          child: const Icon(
-            Icons.auto_delete_outlined,
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (context) => TodoStore(
+            uuid: Provider.of<Uuid>(context, listen: false),
+            todoDbService: TodoDbService.of(context),
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.history),
-            tooltip: 'Show history',
-            onPressed: () {
-              context.goNamed(
-                'todo_history_list',
-              );
+      ],
+      builder: (context, child) => Scaffold(
+        appBar: AppBar(
+          title: const Text('To Do List'),
+          leading: GestureDetector(
+            onTap: () {
+              TodoStore.of(context).deleteDoneTodoItems();
             },
+            child: const Icon(
+              Icons.auto_delete_outlined,
+            ),
           ),
-        ],
-      ),
-      body: Observer(builder: (_) {
-        if (TodoStore.of(context).todos.isEmpty) {
-          return Center(
-            child: IconButton(
-              icon: const Icon(Icons.hourglass_empty, size: 45),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.history),
+              tooltip: 'Show history',
               onPressed: () {
-                _displayAddDialog(TodoStore.of(context).addTodoItem);
+                context.goNamed(
+                  'todo_history_list',
+                );
               },
             ),
+          ],
+        ),
+        body: Observer(builder: (_) {
+          if (TodoStore.of(context).todos.isEmpty) {
+            return Center(
+              child: IconButton(
+                icon: const Icon(Icons.hourglass_empty, size: 45),
+                onPressed: () {
+                  _displayAddDialog(
+                    TodoStore.of(context).addTodoItem,
+                    context,
+                  );
+                },
+              ),
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    (MediaQuery.of(context).size.height / 1.5),
+                crossAxisCount: 2,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4,
+              ),
+              itemCount: TodoStore.of(context).todos.length,
+              itemBuilder: (context, index) => TodoItem(
+                todo: TodoStore.of(context).todos[index],
+                onTodoChanged: TodoStore.of(context).handleTodoChange,
+                todoDelete: TodoStore.of(context).deleteTodoItem,
+                deleteDoneTodoItems: TodoStore.of(context).deleteDoneTodoItems,
+                todoEdit: TodoStore.of(context).editTodoItem,
+              ),
+            ),
           );
-        }
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: MediaQuery.of(context).size.width /
-                  (MediaQuery.of(context).size.height / 1.5),
-              crossAxisCount: 2,
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-            ),
-            itemCount: TodoStore.of(context).todos.length,
-            itemBuilder: (context, index) => TodoItem(
-              todo: TodoStore.of(context).todos[index],
-              onTodoChanged: TodoStore.of(context).handleTodoChange,
-              todoDelete: TodoStore.of(context).deleteTodoItem,
-              deleteDoneTodoItems: TodoStore.of(context).deleteDoneTodoItems,
-              todoEdit: TodoStore.of(context).editTodoItem,
-            ),
+        }),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _displayAddDialog(
+            TodoStore.of(context).addTodoItem,
+            context,
           ),
-        );
-      }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _displayAddDialog(TodoStore.of(context).addTodoItem),
-        tooltip: 'Add Task',
-        child: const Icon(Icons.add),
+          tooltip: 'Add Task',
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
 
   Future<void> _displayAddDialog(
     Function(String title, String description) onCreate,
+    BuildContext context,
   ) async {
     final TextEditingController nameTextFieldController =
         TextEditingController();

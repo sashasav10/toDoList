@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:to_do_list/todo.dart';
+import 'package:to_do_list/todo_details/detailed_task_screen.dart';
+import 'package:to_do_list/todo_details/models/detailed_task_screen_args.dart';
 
 class TodoItem extends StatelessWidget {
   TodoItem(
@@ -55,9 +57,9 @@ class TodoItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           if (!todo.isEdit) {
-            GoRouter.of(context).pushReplacementNamed(
-              'detailed_task_screen',
-              queryParams: {"id": id},
+            Navigator.of(context).pushNamed(
+              DetailedTaskScreen.routeName,
+              arguments: DetailedTaskScreenArgs(todoItemId: id),
             );
           }
         },

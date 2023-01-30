@@ -17,7 +17,9 @@ class TodoStore extends _TodoStore with _$TodoStore {
 }
 
 abstract class _TodoStore with Store {
-  _TodoStore({required this.uuid, required this.todoDbService});
+  _TodoStore({required this.uuid, required this.todoDbService}) {
+    init();
+  }
 
   final Uuid uuid;
   final TodoDbService todoDbService;

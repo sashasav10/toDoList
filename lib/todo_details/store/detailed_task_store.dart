@@ -13,7 +13,10 @@ class DetailedTaskStore extends _DetailedTaskStore with _$DetailedTaskStore {
 }
 
 abstract class _DetailedTaskStore with Store {
-  _DetailedTaskStore({required this.todoDbService, required this.id});
+  _DetailedTaskStore({required this.todoDbService, required this.id}) {
+    init();
+  }
+
   @observable
   TodoDbService todoDbService;
   final String id;
