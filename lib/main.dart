@@ -17,6 +17,9 @@ class TodoApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: TodoList.routeName,
       onGenerateRoute: (settings) => generateRoute(context, settings),
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+      ),
     );
 
     //       .router(

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/services/todo_db_service.dart';
 import 'package:to_do_list/todo_details/models/detailed_task_screen_args.dart';
 import 'package:to_do_list/todo_details/store/detailed_task_store.dart';
+
+import '../todo_list/todo_list_screen.dart';
 
 class DetailedTaskScreen extends StatelessWidget {
   DetailedTaskScreen({super.key, required this.args});
@@ -28,7 +29,9 @@ class DetailedTaskScreen extends StatelessWidget {
           leading: GestureDetector(
             onTap: () {
               DetailedTaskStore.of(context).updateDB();
-              Navigator.of(context).pop();
+              Navigator.of(context).popAndPushNamed(
+                TodoList.routeName,
+              );
             },
             child: const Icon(
               Icons.arrow_back,
@@ -95,10 +98,10 @@ class DetailedTaskScreen extends StatelessWidget {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            GoRouter.of(context).goNamed(
-                              '/',
-                            );
                             DetailedTaskStore.of(context).deleteTodoItem();
+                            Navigator.of(context).popAndPushNamed(
+                              TodoList.routeName,
+                            );
                           },
                           child: const Text('delete'),
                         ),

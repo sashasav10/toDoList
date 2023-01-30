@@ -18,12 +18,14 @@ class ImageStore extends _ImageStore with _$ImageStore {
 }
 
 abstract class _ImageStore with Store {
-  var todoItem;
-
   _ImageStore(
       {required this.imageApiService,
       required this.todoId,
-      required this.todoDbService});
+      required this.todoDbService}) {
+    init();
+  }
+
+  var todoItem;
   final ImageApiService imageApiService;
   final String todoId;
   final TodoDbService todoDbService;

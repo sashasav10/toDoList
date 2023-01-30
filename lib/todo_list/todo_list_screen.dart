@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/services/todo_db_service.dart';
+import 'package:to_do_list/todo_history/todo_history_screen.dart';
 import 'package:to_do_list/todo_list/store/todo_list_store.dart';
 import 'package:to_do_list/todo_list/todo_item.dart';
 import 'package:uuid/uuid.dart';
@@ -40,8 +40,8 @@ class TodoList extends StatelessWidget {
               icon: const Icon(Icons.history),
               tooltip: 'Show history',
               onPressed: () {
-                context.goNamed(
-                  'todo_history_list',
+                Navigator.of(context).pushNamed(
+                  TodoHistoryList.routeName,
                 );
               },
             ),

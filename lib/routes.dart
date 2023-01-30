@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_list/set_photo/models/set_photo_screen_args.dart';
+import 'package:to_do_list/set_photo/set_photo_screen.dart';
 import 'package:to_do_list/todo_details/detailed_task_screen.dart';
 import 'package:to_do_list/todo_details/models/detailed_task_screen_args.dart';
+import 'package:to_do_list/todo_history/todo_history_screen.dart';
 import 'package:to_do_list/todo_list/todo_list_screen.dart';
 
 typedef _MaterialPageBuilder<TArgs> = Widget Function(
@@ -41,6 +44,26 @@ Route<dynamic>? generateRoute(BuildContext context, RouteSettings settings) {
       return materialRoute<DetailedTaskScreenArgs, void>(
         (context, args) => DetailedTaskScreen(args: args),
       );
+    case TodoHistoryList.routeName:
+      return materialRoute<void, void>(
+        (context, args) => TodoHistoryList(),
+      );
+    case SetPhotoScreen.routeName:
+      return materialRoute<SetPhotoScreenArgs, void>(
+        (context, args) => SetPhotoScreen(args: args),
+      );
+
+    //   path: '/set_photo_screen',
+    //           builder: (BuildContext context, GoRouterState state) {
+    //             final todoItemId = state.queryParams["id"];
+    //             return Provider(
+    //               create: (context) => ImageStore(
+    //                 imageApiService: ImageApiService.of(context),
+    //                 todoId: todoItemId!,
+    //                 todoDbService: TodoDbService.of(context),
+    //               ),
+    //               child: const SetPhotoScreen(),
+    //             );
   }
   return null;
 }

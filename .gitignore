@@ -11,6 +11,8 @@
 .svn/
 *.env
 .env
+env.dart
+env.g.dart
 
 
 # IntelliJ related

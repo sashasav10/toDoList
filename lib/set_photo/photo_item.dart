@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import 'image_dto_model.dart';
-import 'image_result_model.dart';
+import '../todo_list/todo_list_screen.dart';
 
 class PhotoItem extends StatelessWidget {
   PhotoItem({
@@ -18,9 +16,8 @@ class PhotoItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           setPhoto(image);
-          context.goNamed(
-            '/',
-            extra: true,
+          Navigator.of(context).popAndPushNamed(
+            TodoList.routeName,
           );
         },
         child: Card(

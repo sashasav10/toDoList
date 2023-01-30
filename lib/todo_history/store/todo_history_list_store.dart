@@ -12,7 +12,9 @@ class TodoHistoryStore extends _TodoHistoryStore with _$TodoHistoryStore {
 }
 
 abstract class _TodoHistoryStore with Store {
-  _TodoHistoryStore({required this.todoDbService});
+  _TodoHistoryStore({required this.todoDbService}) {
+    init();
+  }
 
   final TodoDbService todoDbService;
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:to_do_list/todo.dart';
 import 'package:to_do_list/todo_details/detailed_task_screen.dart';
 import 'package:to_do_list/todo_details/models/detailed_task_screen_args.dart';
+
+import '../set_photo/models/set_photo_screen_args.dart';
+import '../set_photo/set_photo_screen.dart';
 
 class TodoItem extends StatelessWidget {
   TodoItem(
@@ -71,10 +73,10 @@ class TodoItem extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () => {
-                  GoRouter.of(context).pushReplacementNamed(
-                    'set_photo_screen',
-                    queryParams: {"id": id},
-                  )
+                  Navigator.of(context).popAndPushNamed(
+                    SetPhotoScreen.routeName,
+                    arguments: SetPhotoScreenArgs(todoItemId: id),
+                  ),
                 },
                 child: Center(
                   child: Image.network(
