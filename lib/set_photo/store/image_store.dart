@@ -1,9 +1,9 @@
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/services/todo_db_service.dart';
-import '../../services/image_api_service.dart';
+import '../service/image_api_service.dart';
 import '../../todo.dart';
-import '../image_result_model.dart';
+import '../models/image_result_model.dart';
 
 part 'image_store.g.dart';
 

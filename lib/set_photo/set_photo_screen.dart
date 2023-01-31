@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/set_photo/photo_item.dart';
+import 'package:to_do_list/set_photo/widgets/photo_item.dart';
 import 'package:to_do_list/set_photo/store/image_store.dart';
 
-import '../services/image_api_service.dart';
+import 'service/image_api_service.dart';
 import '../services/todo_db_service.dart';
 import '../todo_list/todo_list_screen.dart';
 import 'models/set_photo_screen_args.dart';

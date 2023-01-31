@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../todo_list/todo_list_screen.dart';
+import '../../todo_list/todo_list_screen.dart';
 
 class PhotoItem extends StatelessWidget {
   PhotoItem({

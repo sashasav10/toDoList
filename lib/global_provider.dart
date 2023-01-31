@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/services/image_api_service.dart';
+import 'package:to_do_list/set_photo/service/image_api_service.dart';
 import 'package:to_do_list/services/todo_db_service.dart';
 import 'package:uuid/uuid.dart';
+
+import 'api/api_client.dart';
 
 class GlobalsProvider extends StatefulWidget {
   const GlobalsProvider({

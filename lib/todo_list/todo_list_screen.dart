@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:to_do_list/services/todo_db_service.dart';
 import 'package:to_do_list/todo_history/todo_history_screen.dart';
 import 'package:to_do_list/todo_list/store/todo_list_store.dart';
-import 'package:to_do_list/todo_list/todo_item.dart';
+import 'package:to_do_list/todo_list/widgets/todo_item.dart';
 import 'package:uuid/uuid.dart';
 
-import 'alert_dialog.dart';
+import 'widgets/alert_dialog.dart';
 
 class TodoList extends StatelessWidget {
   TodoList({super.key});

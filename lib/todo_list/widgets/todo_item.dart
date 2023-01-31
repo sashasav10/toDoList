@@ -3,8 +3,8 @@ import 'package:to_do_list/todo.dart';
 import 'package:to_do_list/todo_details/detailed_task_screen.dart';
 import 'package:to_do_list/todo_details/models/detailed_task_screen_args.dart';
 
-import '../set_photo/models/set_photo_screen_args.dart';
-import '../set_photo/set_photo_screen.dart';
+import '../../set_photo/models/set_photo_screen_args.dart';
+import '../../set_photo/set_photo_screen.dart';
 
 class TodoItem extends StatelessWidget {
   TodoItem(

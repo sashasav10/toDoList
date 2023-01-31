@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/todo_history/store/todo_history_list_store.dart';
-import 'package:to_do_list/todo_history/todo_history_item.dart';
+import 'package:to_do_list/todo_history/widget/todo_history_item.dart';
 
 import '../services/todo_db_service.dart';
 
