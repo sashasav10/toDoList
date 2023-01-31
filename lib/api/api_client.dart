@@ -10,11 +10,12 @@ class ApiClient {
         connectTimeout: 5000,
         receiveTimeout: 3000,
       );
-  final _interceptor = ApiProviderImageInterceptor();
+
+  late final _dio = Dio(options)
+    ..interceptors.add(ApiProviderImageInterceptor());
 
   Future<Response<dynamic>> get(String path,
-      {Map<String, dynamic>? queryParameters}) {
-    final _dio = Dio(options)..interceptors.add(_interceptor);
+      {Map<String, dynamic>? queryParameters}) async {
     return _dio.get(path);
   }
 }
