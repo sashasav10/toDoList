@@ -57,6 +57,22 @@ mixin _$DetailedTaskStore on _DetailedTaskStore, Store {
     });
   }
 
+  late final _$_todosAtom =
+      Atom(name: '_DetailedTaskStore._todos', context: context);
+
+  @override
+  ObservableList<Todo> get _todos {
+    _$_todosAtom.reportRead();
+    return super._todos;
+  }
+
+  @override
+  set _todos(ObservableList<Todo> value) {
+    _$_todosAtom.reportWrite(value, super._todos, () {
+      super._todos = value;
+    });
+  }
+
   late final _$initAsyncAction =
       AsyncAction('_DetailedTaskStore.init', context: context);
 

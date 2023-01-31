@@ -52,18 +52,6 @@ Route<dynamic>? generateRoute(BuildContext context, RouteSettings settings) {
       return materialRoute<SetPhotoScreenArgs, void>(
         (context, args) => SetPhotoScreen(args: args),
       );
-
-    //   path: '/set_photo_screen',
-    //           builder: (BuildContext context, GoRouterState state) {
-    //             final todoItemId = state.queryParams["id"];
-    //             return Provider(
-    //               create: (context) => ImageStore(
-    //                 imageApiService: ImageApiService.of(context),
-    //                 todoId: todoItemId!,
-    //                 todoDbService: TodoDbService.of(context),
-    //               ),
-    //               child: const SetPhotoScreen(),
-    //             );
   }
   return null;
 }

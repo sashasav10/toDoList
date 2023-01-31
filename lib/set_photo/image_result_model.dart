@@ -1,13 +1,4 @@
-// To parse this JSON data, do
-//
-//     final imageResult = imageResultFromJson(jsonString);
-
 import 'dart:convert';
-
-// ImageResult imageResultFromJson(String str) =>
-//     ImageResult.fromJson(json.decode(str));
-
-//String imageResultToJson(ImageResult data) => json.encode(data.toJson());
 
 class ImageResult {
   ImageResult({

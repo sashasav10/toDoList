@@ -32,7 +32,7 @@ abstract class _ImageStore with Store {
   @observable
   ImageResult? _images;
   ImageResult? get images => _images;
-  ObservableList<Todo> _todos = ObservableList<Todo>();
+  final ObservableList<Todo> _todos = ObservableList<Todo>();
 
   @action
   Future<void> init() async {

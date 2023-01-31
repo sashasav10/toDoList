@@ -9,8 +9,6 @@ class TodoDbService {
   static TodoDbService of(context) => Provider.of(context, listen: false);
   static const _todoKey = "todoList";
   static const _todoHistoryKey = "todoHistoryList";
-  ObservableList<Todo> todos = ObservableList<Todo>();
-  ObservableList<Todo> todosHistory = ObservableList<Todo>();
 
   void addTodoToSP(List<Todo> todos) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
