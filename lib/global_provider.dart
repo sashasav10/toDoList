@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do_list/services/todo_service.dart';
 import 'package:to_do_list/set_photo/provider/image_api_provider.dart';
 import 'package:to_do_list/set_photo/service/image_api_service.dart';
-import 'package:to_do_list/services/todo_db_service.dart';
+import 'package:to_do_list/services/todo_db_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'api/api_client.dart';
@@ -25,7 +26,10 @@ class _GlobalsProviderState extends State<GlobalsProvider> {
     return MultiProvider(
       providers: [
         Provider<Uuid>(create: (context) => const Uuid()),
-        Provider<TodoDbService>(create: (context) => TodoDbService()),
+        Provider<TodoDbProvider>(create: (context) => TodoDbProvider()),
+        Provider<TodoDbService>(
+            create: (context) =>
+                TodoDbService(todoDbProvider: TodoDbProvider())),
         Provider<ImageApiService>(
             create: (context) =>
                 ImageApiService(apiProvider: ImageApiProvider())),

@@ -17,19 +17,16 @@ mixin _$TodoStore on _TodoStore, Store {
     return _$initAsyncAction.run(() => super.init());
   }
 
-  late final _$_TodoStoreActionController =
-      ActionController(name: '_TodoStore', context: context);
+  late final _$markAsDoneAsyncAction =
+      AsyncAction('_TodoStore.markAsDone', context: context);
 
   @override
-  void handleTodoChange(Todo todo) {
-    final _$actionInfo = _$_TodoStoreActionController.startAction(
-        name: '_TodoStore.handleTodoChange');
-    try {
-      return super.handleTodoChange(todo);
-    } finally {
-      _$_TodoStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> markAsDone(String id) {
+    return _$markAsDoneAsyncAction.run(() => super.markAsDone(id));
   }
+
+  late final _$_TodoStoreActionController =
+      ActionController(name: '_TodoStore', context: context);
 
   @override
   void addTodoItem(String name, String description) {

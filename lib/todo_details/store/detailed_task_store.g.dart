@@ -13,13 +13,13 @@ mixin _$DetailedTaskStore on _DetailedTaskStore, Store {
       Atom(name: '_DetailedTaskStore.todoDbService', context: context);
 
   @override
-  TodoDbService get todoDbService {
+  TodoDbProvider get todoDbService {
     _$todoDbServiceAtom.reportRead();
     return super.todoDbService;
   }
 
   @override
-  set todoDbService(TodoDbService value) {
+  set todoDbService(TodoDbProvider value) {
     _$todoDbServiceAtom.reportWrite(value, super.todoDbService, () {
       super.todoDbService = value;
     });

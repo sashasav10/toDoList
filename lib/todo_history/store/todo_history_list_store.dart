@@ -1,7 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
-import '../../services/todo_db_service.dart';
+import '../../services/todo_db_provider.dart';
 
 part 'todo_history_list_store.g.dart';
 
@@ -16,7 +16,7 @@ abstract class _TodoHistoryStore with Store {
     init();
   }
 
-  final TodoDbService todoDbService;
+  final TodoDbProvider todoDbService;
 
   @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();

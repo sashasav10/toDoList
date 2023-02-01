@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/services/todo_db_service.dart';
+import 'package:to_do_list/services/todo_db_provider.dart';
 import '../service/image_api_service.dart';
 import '../../todo.dart';
 import '../models/image_result_model.dart';
@@ -28,7 +28,7 @@ abstract class _ImageStore with Store {
   var todoItem;
   final ImageApiService imageApiService;
   final String todoId;
-  final TodoDbService todoDbService;
+  final TodoDbProvider todoDbService;
   @observable
   ImageResult? _images;
   ImageResult? get images => _images;

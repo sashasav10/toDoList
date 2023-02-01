@@ -137,7 +137,7 @@ class TodoItem extends StatelessWidget {
                         checkColor: Colors.white,
                         value: todo.checked,
                         onChanged: (bool? value) {
-                          onTodoChanged(todo);
+                          onTodoChanged(todo.id);
                         },
                       ),
                       IconButton(

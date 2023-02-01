@@ -5,7 +5,7 @@ import 'package:to_do_list/set_photo/widgets/photo_item.dart';
 import 'package:to_do_list/set_photo/store/image_store.dart';
 
 import 'service/image_api_service.dart';
-import '../services/todo_db_service.dart';
+import '../services/todo_db_provider.dart';
 import '../todo_list/todo_list_screen.dart';
 import 'models/set_photo_screen_args.dart';
 
@@ -28,7 +28,7 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
       create: (context) => ImageStore(
           imageApiService: ImageApiService.of(context),
           todoId: args.todoItemId,
-          todoDbService: TodoDbService.of(context)),
+          todoDbService: TodoDbProvider.of(context)),
       builder: (context, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Set photo'),

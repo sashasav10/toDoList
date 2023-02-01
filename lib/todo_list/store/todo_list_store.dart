@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../services/todo_db_service.dart';
+import '../../services/todo_db_provider.dart';
+import '../../services/todo_service.dart';
 
 part 'todo_list_store.g.dart';
 
@@ -42,9 +43,9 @@ abstract class _TodoStore with Store {
   }
 
   @action
-  void handleTodoChange(Todo todo) {
-    _todos[getToDoIndexById(todo.id)] = todo.copyWith(checked: !todo.checked)!;
-    todoDbService.addTodoToSP(_todos);
+  Future<void> markAsDone(String id) async {
+    todoDbService.markAsDone(id);
+    _todos = await todoDbService.getTodoFromSF();
   }
 
   @action
@@ -63,9 +64,7 @@ abstract class _TodoStore with Store {
 
   @action
   void editTodoItem(String id, String name, String description, bool isEdit) {
-    _todos[getToDoIndexById(id)] = _todos[getToDoIndexById(id)].copyWith(
-        id: id, name: name, description: description, isEdit: isEdit)!;
-    todoDbService.addTodoToSP(_todos);
+    todoDbService.editTodoItem(id, name, description, isEdit);
   }
 
   @action

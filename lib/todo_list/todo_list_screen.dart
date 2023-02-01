@@ -2,12 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/services/todo_db_service.dart';
+import 'package:to_do_list/services/todo_db_provider.dart';
 import 'package:to_do_list/todo_history/todo_history_screen.dart';
 import 'package:to_do_list/todo_list/store/todo_list_store.dart';
 import 'package:to_do_list/todo_list/widgets/todo_item.dart';
 import 'package:uuid/uuid.dart';
 
+import '../services/todo_service.dart';
 import 'widgets/alert_dialog.dart';
 
 class TodoList extends StatelessWidget {
@@ -75,7 +76,7 @@ class TodoList extends StatelessWidget {
               itemCount: TodoStore.of(context).todos.length,
               itemBuilder: (context, index) => TodoItem(
                 todo: TodoStore.of(context).todos[index],
-                onTodoChanged: TodoStore.of(context).handleTodoChange,
+                onTodoChanged: TodoStore.of(context).markAsDone,
                 todoDelete: TodoStore.of(context).deleteTodoItem,
                 deleteDoneTodoItems: TodoStore.of(context).deleteDoneTodoItems,
                 todoEdit: TodoStore.of(context).editTodoItem,

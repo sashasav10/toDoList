@@ -2,7 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 
-import '../../services/todo_db_service.dart';
+import '../../services/todo_db_provider.dart';
 
 part 'detailed_task_store.g.dart';
 
@@ -18,7 +18,7 @@ abstract class _DetailedTaskStore with Store {
   }
 
   @observable
-  TodoDbService todoDbService;
+  TodoDbProvider todoDbService;
   final String id;
   @observable
   Todo? todoItem;
