@@ -105,9 +105,9 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
                       mainAxisSpacing: 4,
                       crossAxisSpacing: 4,
                     ),
-                    itemCount: images.value.length,
+                    itemCount: images.value!.length,
                     itemBuilder: (context, index) => PhotoItem(
-                      image: images.value[index].contentUrl,
+                      image: images.value![index].url!,
                       setPhoto: ImageStore.of(context).setPhoto,
                     ),
                   ),

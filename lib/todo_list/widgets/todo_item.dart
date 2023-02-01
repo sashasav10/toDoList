@@ -78,9 +78,19 @@ class TodoItem extends StatelessWidget {
                   ),
                 },
                 child: Center(
-                  child: Image.network(
-                    todo.photo,
-                    height: 100,
+                  child: Column(
+                    children: [
+                      if (todo.photo == null)
+                        const Image(
+                          image: AssetImage('assets/todo_icon.jpeg'),
+                          height: 100,
+                        )
+                      else
+                        Image.network(
+                          todo.photo!,
+                          height: 100,
+                        ),
+                    ],
                   ),
                 ),
               ),

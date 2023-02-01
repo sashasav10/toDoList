@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do_list/set_photo/provider/image_api_provider.dart';
 import 'package:to_do_list/set_photo/service/image_api_service.dart';
 import 'package:to_do_list/services/todo_db_service.dart';
 import 'package:uuid/uuid.dart';
@@ -25,7 +26,9 @@ class _GlobalsProviderState extends State<GlobalsProvider> {
       providers: [
         Provider<Uuid>(create: (context) => const Uuid()),
         Provider<TodoDbService>(create: (context) => TodoDbService()),
-        Provider<ImageApiService>(create: (context) => ImageApiService()),
+        Provider<ImageApiService>(
+            create: (context) =>
+                ImageApiService(apiProvider: ImageApiProvider())),
       ],
       child: widget.child,
     );

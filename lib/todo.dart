@@ -5,7 +5,7 @@ class Todo {
     required this.description,
     required this.checked,
     this.isEdit = false,
-    this.photo = "https://cdn-icons-png.flaticon.com/512/1/1560.png",
+    this.photo,
   });
 
   final String id;
@@ -13,7 +13,7 @@ class Todo {
   final String description;
   final bool checked;
   final bool isEdit;
-  final String photo;
+  final String? photo;
 
   Todo? copyWith({
     String? id,
