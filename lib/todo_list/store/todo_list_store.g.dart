@@ -17,12 +17,30 @@ mixin _$TodoStore on _TodoStore, Store {
     return _$initAsyncAction.run(() => super.init());
   }
 
+  late final _$updateTodosAsyncAction =
+      AsyncAction('_TodoStore.updateTodos', context: context);
+
+  @override
+  Future<void> updateTodos() {
+    return _$updateTodosAsyncAction.run(() => super.updateTodos());
+  }
+
   late final _$markAsDoneAsyncAction =
       AsyncAction('_TodoStore.markAsDone', context: context);
 
   @override
   Future<void> markAsDone(String id) {
     return _$markAsDoneAsyncAction.run(() => super.markAsDone(id));
+  }
+
+  late final _$editTodoItemAsyncAction =
+      AsyncAction('_TodoStore.editTodoItem', context: context);
+
+  @override
+  Future<void> editTodoItem(
+      String id, String name, String description, bool isEdit) {
+    return _$editTodoItemAsyncAction
+        .run(() => super.editTodoItem(id, name, description, isEdit));
   }
 
   late final _$_TodoStoreActionController =
@@ -45,17 +63,6 @@ mixin _$TodoStore on _TodoStore, Store {
         name: '_TodoStore.deleteTodoItem');
     try {
       return super.deleteTodoItem(id);
-    } finally {
-      _$_TodoStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void editTodoItem(String id, String name, String description, bool isEdit) {
-    final _$actionInfo = _$_TodoStoreActionController.startAction(
-        name: '_TodoStore.editTodoItem');
-    try {
-      return super.editTodoItem(id, name, description, isEdit);
     } finally {
       _$_TodoStoreActionController.endAction(_$actionInfo);
     }

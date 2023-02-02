@@ -10,7 +10,7 @@ class TodoDbProvider {
   static const _todoKey = "todoList";
   static const _todoHistoryKey = "todoHistoryList";
 
-  void addTodoToSP(List<Todo> todos) async {
+  Future<void> addTodoToSP(List<Todo> todos) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(_todoKey, encode(todos));
   }
