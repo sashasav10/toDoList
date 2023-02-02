@@ -9,22 +9,6 @@ part of 'detailed_task_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$DetailedTaskStore on _DetailedTaskStore, Store {
-  late final _$todoDbServiceAtom =
-      Atom(name: '_DetailedTaskStore.todoDbService', context: context);
-
-  @override
-  TodoDbProvider get todoDbService {
-    _$todoDbServiceAtom.reportRead();
-    return super.todoDbService;
-  }
-
-  @override
-  set todoDbService(TodoDbProvider value) {
-    _$todoDbServiceAtom.reportWrite(value, super.todoDbService, () {
-      super.todoDbService = value;
-    });
-  }
-
   late final _$todoItemAtom =
       Atom(name: '_DetailedTaskStore.todoItem', context: context);
 
@@ -81,57 +65,51 @@ mixin _$DetailedTaskStore on _DetailedTaskStore, Store {
     return _$initAsyncAction.run(() => super.init());
   }
 
-  late final _$_DetailedTaskStoreActionController =
-      ActionController(name: '_DetailedTaskStore', context: context);
+  late final _$updateTodosAsyncAction =
+      AsyncAction('_DetailedTaskStore.updateTodos', context: context);
 
   @override
-  void changeAsMarked() {
-    final _$actionInfo = _$_DetailedTaskStoreActionController.startAction(
-        name: '_DetailedTaskStore.changeAsMarked');
-    try {
-      return super.changeAsMarked();
-    } finally {
-      _$_DetailedTaskStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> updateTodos() {
+    return _$updateTodosAsyncAction.run(() => super.updateTodos());
   }
 
-  @override
-  void deleteTodoItem() {
-    final _$actionInfo = _$_DetailedTaskStoreActionController.startAction(
-        name: '_DetailedTaskStore.deleteTodoItem');
-    try {
-      return super.deleteTodoItem();
-    } finally {
-      _$_DetailedTaskStoreActionController.endAction(_$actionInfo);
-    }
-  }
+  late final _$changeAsMarkedAsyncAction =
+      AsyncAction('_DetailedTaskStore.changeAsMarked', context: context);
 
   @override
-  void editTodoItem(String name, String description, bool isEdit) {
-    final _$actionInfo = _$_DetailedTaskStoreActionController.startAction(
-        name: '_DetailedTaskStore.editTodoItem');
-    try {
-      return super.editTodoItem(name, description, isEdit);
-    } finally {
-      _$_DetailedTaskStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> changeAsMarked() {
+    return _$changeAsMarkedAsyncAction.run(() => super.changeAsMarked());
   }
 
+  late final _$deleteTodoItemAsyncAction =
+      AsyncAction('_DetailedTaskStore.deleteTodoItem', context: context);
+
   @override
-  void deleteDoneTodoItems() {
-    final _$actionInfo = _$_DetailedTaskStoreActionController.startAction(
-        name: '_DetailedTaskStore.deleteDoneTodoItems');
-    try {
-      return super.deleteDoneTodoItems();
-    } finally {
-      _$_DetailedTaskStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> deleteTodoItem() {
+    return _$deleteTodoItemAsyncAction.run(() => super.deleteTodoItem());
+  }
+
+  late final _$editTodoItemAsyncAction =
+      AsyncAction('_DetailedTaskStore.editTodoItem', context: context);
+
+  @override
+  Future<void> editTodoItem(String name, String description, bool isEdit) {
+    return _$editTodoItemAsyncAction
+        .run(() => super.editTodoItem(name, description, isEdit));
+  }
+
+  late final _$deleteDoneTodoItemsAsyncAction =
+      AsyncAction('_DetailedTaskStore.deleteDoneTodoItems', context: context);
+
+  @override
+  Future<void> deleteDoneTodoItems() {
+    return _$deleteDoneTodoItemsAsyncAction
+        .run(() => super.deleteDoneTodoItems());
   }
 
   @override
   String toString() {
     return '''
-todoDbService: ${todoDbService},
 todoItem: ${todoItem},
 isLoading: ${isLoading}
     ''';

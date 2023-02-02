@@ -24,18 +24,14 @@ abstract class _TodoStore with Store {
 
   final Uuid uuid;
   final TodoDbService todoDbService;
-
+  @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();
+  @observable
   ObservableList<Todo> _todosHistory = ObservableList<Todo>();
   ObservableList<Todo> get todos => _todos;
 
   @action
   Future<void> init() async {
-    // _todosHistory.clear();
-    // _todosHistory.addAll(
-    //   await todoDbService.getHistoryTodoFromSF(),
-    // );
-
     _todos.clear();
     _todos.addAll(
       await todoDbService.getTodoFromSF(),
@@ -49,7 +45,7 @@ abstract class _TodoStore with Store {
 
   @action
   Future<void> markAsDone(String id) async {
-    todoDbService.markAsDone(id);
+    await todoDbService.markAsDone(id);
     await updateTodos();
     print(_todos);
   }
@@ -63,9 +59,9 @@ abstract class _TodoStore with Store {
   }
 
   @action
-  void deleteTodoItem(String id) {
-    _todos.removeWhere((item) => item.id == id);
-    todoDbService.addTodoToSP(_todos);
+  Future<void> deleteTodoItem(String id) async {
+    await todoDbService.deleteTodoItem(id);
+    await updateTodos();
   }
 
   @action
@@ -76,30 +72,8 @@ abstract class _TodoStore with Store {
   }
 
   @action
-  void deleteDoneTodoItems() {
-    addDeletedToHistory();
-    _todos.removeWhere((element) => element.checked == true);
-    todoDbService.addTodoToSP(_todos);
-  }
-
-  @action
-  void addDeletedToHistory() {
-    _todosHistory
-        .addAll(_todos.where((element) => element.checked == true).toList());
-    todoDbService.addHistoryTodoToSP(_todosHistory);
-    _todos.removeWhere((element) => element.checked == true);
-    todoDbService.addTodoToSP(_todos);
-  }
-
-  int getToDoIndexById(String id) {
-    final index = _todos.indexWhere((element) => element.id == id);
-    if (index < 0) throw Exception("Index must be more than 0");
-    return index;
-  }
-
-  Todo getToDoById(String id) {
-    final index = _todos.indexWhere((element) => element.id == id);
-    if (index < 0) throw Exception("Index must be more than 0");
-    return _todos[index];
+  Future<void> deleteDoneTodoItems() async {
+    await todoDbService.deleteDoneTodoItems();
+    await updateTodos();
   }
 }

@@ -7,8 +7,8 @@ class ApiClient {
 
   BaseOptions get options => BaseOptions(
         baseUrl: baseUrl,
-        connectTimeout: 5000,
-        receiveTimeout: 3000,
+        connectTimeout: 6000,
+        receiveTimeout: 6000,
       );
 
   late final _dio = Dio(options)

@@ -22,7 +22,7 @@ class TodoDbProvider {
     return await decode(todoString);
   }
 
-  void addHistoryTodoToSP(List<Todo> todos) async {
+  Future<void> addHistoryTodoToSP(List<Todo> todos) async {
     SharedPreferences prefsHistory = await SharedPreferences.getInstance();
     prefsHistory.setString(_todoHistoryKey, encode(todos));
   }

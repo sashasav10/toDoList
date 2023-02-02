@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 import '../../services/todo_db_provider.dart';
+import '../../services/todo_service.dart';
 
 part 'todo_history_list_store.g.dart';
 
@@ -16,23 +17,24 @@ abstract class _TodoHistoryStore with Store {
     init();
   }
 
-  final TodoDbProvider todoDbService;
+  final TodoDbService todoDbService;
 
   @observable
-  ObservableList<Todo> _todos = ObservableList<Todo>();
+  ObservableList<Todo> _todosHistory = ObservableList<Todo>();
 
-  ObservableList<Todo> get todos => _todos;
+  ObservableList<Todo> get todos => _todosHistory;
 
   @action
   Future<void> init() async {
-    _todos.addAll(
+    _todosHistory.addAll(
       await todoDbService.getHistoryTodoFromSF(),
     );
   }
 
   @action
-  void deleteHistoryTodoItems() {
-    _todos.clear();
-    todoDbService.addHistoryTodoToSP(_todos);
+  Future<void> deleteHistoryTodoItems() async {
+    await todoDbService.deleteHistoryTodoItems();
+    _todosHistory =
+        ObservableList.of(await todoDbService.getHistoryTodoFromSF());
   }
 }

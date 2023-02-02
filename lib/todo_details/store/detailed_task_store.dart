@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 
 import '../../services/todo_db_provider.dart';
+import '../../services/todo_service.dart';
 
 part 'detailed_task_store.g.dart';
 
@@ -17,8 +18,7 @@ abstract class _DetailedTaskStore with Store {
     init();
   }
 
-  @observable
-  TodoDbProvider todoDbService;
+  TodoDbService todoDbService;
   final String id;
   @observable
   Todo? todoItem;
@@ -37,38 +37,35 @@ abstract class _DetailedTaskStore with Store {
     isLoading = false;
   }
 
-  void updateDB() async {
-    _todos[_getToDoIndexById(id)] = todoItem!;
-    todoDbService.addTodoToSP(_todos);
+  @action
+  Future<void> updateTodos() async {
+    _todos = ObservableList.of(await todoDbService.getTodoFromSF());
+    todoItem = _getToDoById(id);
   }
 
   @action
-  void changeAsMarked() {
-    todoItem = todoItem?.copyWith(checked: !todoItem!.checked);
-    updateDB();
+  Future<void> changeAsMarked() async {
+    await todoDbService.markAsDone(id);
+    await updateTodos();
   }
 
   @action
-  void deleteTodoItem() {
-    _todos.removeWhere((item) => item.id == id);
-    todoDbService.addTodoToSP(_todos);
-    updateDB();
+  Future<void> deleteTodoItem() async {
+    await todoDbService.deleteTodoItem(todoItem!.id);
+    await updateTodos();
   }
 
   @action
-  void editTodoItem(String name, String description, bool isEdit) {
-    todoItem = todoItem?.copyWith(
-        name: name, description: description, checked: false, isEdit: isEdit);
-    updateDB();
+  Future<void> editTodoItem(
+      String name, String description, bool isEdit) async {
+    await todoDbService.editTodoItem(id, name, description, isEdit);
+    await updateTodos();
   }
 
   @action
-  void deleteDoneTodoItems() {
-    todoDbService.addTodoToSP(
-        _todos.where((element) => element.checked == true).toList());
-    _todos.removeWhere((element) => element.checked == true);
-    todoDbService.addTodoToSP(_todos);
-    updateDB();
+  Future<void> deleteDoneTodoItems() async {
+    await todoDbService.deleteDoneTodoItems();
+    await updateTodos();
   }
 
   int _getToDoIndexById(String id) {

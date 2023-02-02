@@ -1,6 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/services/todo_db_provider.dart';
+import '../../services/todo_service.dart';
 import '../service/image_api_service.dart';
 import '../../todo.dart';
 import '../models/image_result_model.dart';
@@ -28,7 +29,7 @@ abstract class _ImageStore with Store {
   var todoItem;
   final ImageApiService imageApiService;
   final String todoId;
-  final TodoDbProvider todoDbService;
+  final TodoDbService todoDbService;
   @observable
   ImageResult? _images;
   ImageResult? get images => _images;
@@ -47,16 +48,14 @@ abstract class _ImageStore with Store {
   }
 
   @action
-  void setPhoto(String photo) {
-    todoItem = todoItem?.copyWith(
-      photo: photo,
-    );
+  Future<void> setPhoto(String photo) async {
+    await todoDbService.setPhoto(todoId, photo);
     updateDB();
   }
 
   void updateDB() async {
-    _todos[_getToDoIndexById(todoId)] = todoItem!;
-    todoDbService.addTodoToSP(_todos);
+    final todoList = await todoDbService.getTodoFromSF();
+    _todos[_getToDoIndexById(todoId)] = todoList[_getToDoIndexById(todoId)];
   }
 
   int _getToDoIndexById(String id) {

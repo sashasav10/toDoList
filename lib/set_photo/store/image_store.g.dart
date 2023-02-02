@@ -33,18 +33,12 @@ mixin _$ImageStore on _ImageStore, Store {
     return _$initAsyncAction.run(() => super.init());
   }
 
-  late final _$_ImageStoreActionController =
-      ActionController(name: '_ImageStore', context: context);
+  late final _$setPhotoAsyncAction =
+      AsyncAction('_ImageStore.setPhoto', context: context);
 
   @override
-  void setPhoto(String photo) {
-    final _$actionInfo =
-        _$_ImageStoreActionController.startAction(name: '_ImageStore.setPhoto');
-    try {
-      return super.setPhoto(photo);
-    } finally {
-      _$_ImageStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> setPhoto(String photo) {
+    return _$setPhotoAsyncAction.run(() => super.setPhoto(photo));
   }
 
   @override
