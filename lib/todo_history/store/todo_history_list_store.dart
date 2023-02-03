@@ -26,15 +26,15 @@ abstract class _TodoHistoryStore with Store {
 
   @action
   Future<void> init() async {
-    _todosHistory.addAll(
-      await todoDbService.getHistoryTodoFromSF(),
-    );
+    // _todosHistory.addAll(
+    //   await todoDbService.getHistoryTodoFromSF(),
+    // );
   }
 
   @action
   Future<void> deleteHistoryTodoItems() async {
     await todoDbService.deleteHistoryTodoItems();
-    _todosHistory =
-        ObservableList.of(await todoDbService.getHistoryTodoFromSF());
+    // _todosHistory =
+    //     ObservableList.of(await todoDbService.getHistoryTodoFromSF());
   }
 }

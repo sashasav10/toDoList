@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,28 +12,25 @@ class TodoDbProvider {
   static const _todoKey = "todoList";
   static const _todoHistoryKey = "todoHistoryList";
 
-  Future<void> addTodoToSP(List<Todo> todos) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(_todoKey, encode(todos));
+  Future<void> addTodos(List<Todo> todos) async {
+    final box = Hive.box('todoBox');
+    box.clear();
+    await box.put("todoListBox", todos);
   }
 
-  Future<List<Todo>> getTodoFromSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? todoString = prefs.getString(_todoKey);
-    if (todoString == null) return [];
-    return await decode(todoString);
+  Future<void> updateTodo(int index, Todo todo) async {
+    final box = Hive.box('todoBox');
+    box.putAt(index, todo);
   }
 
-  Future<void> addHistoryTodoToSP(List<Todo> todos) async {
-    SharedPreferences prefsHistory = await SharedPreferences.getInstance();
-    prefsHistory.setString(_todoHistoryKey, encode(todos));
+  Future<List<Todo>> getTodos() async {
+    final box = Hive.box('todoBox');
+    return box.get("todoListBox");
   }
 
-  Future<List<Todo>> getHistoryTodoFromSF() async {
-    SharedPreferences prefsHistory = await SharedPreferences.getInstance();
-    String? todoHistoryString = prefsHistory.getString(_todoHistoryKey);
-    if (todoHistoryString == null) return [];
-    return await decode(todoHistoryString);
+  Future<void> deleteTodo(int index) async {
+    final box = Hive.box('todoBox');
+    box.deleteAt(index);
   }
 
   String encode(List<Todo> todos) => json.encode(

@@ -1,4 +1,9 @@
-class Todo {
+import 'package:hive/hive.dart';
+
+part 'todo.g.dart';
+
+@HiveType(typeId: 0)
+class Todo extends HiveObject {
   Todo({
     required this.id,
     required this.name,
@@ -6,14 +11,23 @@ class Todo {
     required this.checked,
     this.isEdit = false,
     this.photo,
+    this.isHistory = false,
   });
 
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String description;
+  @HiveField(3)
   final bool checked;
+  @HiveField(4)
   final bool isEdit;
+  @HiveField(5)
   final String? photo;
+  @HiveField(5)
+  final bool isHistory;
 
   Todo? copyWith({
     String? id,
