@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../services/todo_db_provider.dart';
 import '../../services/todo_service.dart';
 
 part 'todo_list_store.g.dart';
@@ -48,7 +47,6 @@ abstract class _TodoStore with Store {
   Future<void> markAsDone(String id) async {
     await todoDbService.markAsDone(id);
     await updateTodos();
-    print(_todos);
   }
 
   @action
