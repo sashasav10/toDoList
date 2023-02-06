@@ -78,7 +78,7 @@ class TodoList extends StatelessWidget {
                 todo: TodoStore.of(context).todos[index],
                 onTodoChanged: TodoStore.of(context).markAsDone,
                 todoDelete: TodoStore.of(context).deleteTodoItem,
-                deleteDoneTodoItems: TodoStore.of(context).deleteDoneTodoItems,
+                deleteDoneTodoItem: TodoStore.of(context).deleteDoneTodoItem,
                 todoEdit: TodoStore.of(context).editTodoItem,
               ),
             ),

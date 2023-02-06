@@ -91,6 +91,15 @@ mixin _$TodoStore on _TodoStore, Store {
         .run(() => super.deleteDoneTodoItems());
   }
 
+  late final _$deleteDoneTodoItemAsyncAction =
+      AsyncAction('_TodoStore.deleteDoneTodoItem', context: context);
+
+  @override
+  Future<void> deleteDoneTodoItem(String id) {
+    return _$deleteDoneTodoItemAsyncAction
+        .run(() => super.deleteDoneTodoItem(id));
+  }
+
   late final _$_TodoStoreActionController =
       ActionController(name: '_TodoStore', context: context);
 

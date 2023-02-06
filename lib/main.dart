@@ -10,8 +10,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(TodoAdapter());
-  await Hive.openBox("todoBox");
-  await Hive.openBox("todoHistoryBox");
+  await Hive.openBox<Todo>("todoBox");
   runApp(
     const GlobalsProvider(
       child: TodoApp(),

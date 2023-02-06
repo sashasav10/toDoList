@@ -28,19 +28,20 @@ abstract class _TodoStore with Store {
   ObservableList<Todo> _todos = ObservableList<Todo>();
   @observable
   ObservableList<Todo> _todosHistory = ObservableList<Todo>();
-  ObservableList<Todo> get todos => _todos;
+  ObservableList<Todo> get todos =>
+      ObservableList.of(_todos.where((element) => element.isHistory == false));
 
   @action
   Future<void> init() async {
     _todos.clear();
     _todos.addAll(
-      await todoDbService.getTodoFromSF(),
+      await todoDbService.getTodo(),
     );
   }
 
   @action
   Future<void> updateTodos() async {
-    _todos = ObservableList.of(await todoDbService.getTodoFromSF());
+    _todos = ObservableList.of(await todoDbService.getTodo());
   }
 
   @action
@@ -52,10 +53,9 @@ abstract class _TodoStore with Store {
 
   @action
   void addTodoItem(String name, String description) {
-    _todos.add(
-      Todo(id: uuid.v1(), name: name, description: description, checked: false),
-    );
-    todoDbService.addTodoToSP(_todos);
+    todoDbService.addTodo(Todo(
+        id: uuid.v1(), name: name, description: description, checked: false));
+    init();
   }
 
   @action
@@ -74,6 +74,12 @@ abstract class _TodoStore with Store {
   @action
   Future<void> deleteDoneTodoItems() async {
     await todoDbService.deleteDoneTodoItems();
+    await updateTodos();
+  }
+
+  @action
+  Future<void> deleteDoneTodoItem(String id) async {
+    await todoDbService.deleteDoneTodoItem(id);
     await updateTodos();
   }
 }

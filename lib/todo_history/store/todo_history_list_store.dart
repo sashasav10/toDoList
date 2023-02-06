@@ -20,21 +20,22 @@ abstract class _TodoHistoryStore with Store {
   final TodoDbService todoDbService;
 
   @observable
-  ObservableList<Todo> _todosHistory = ObservableList<Todo>();
+  ObservableList<Todo> _todos = ObservableList<Todo>();
 
-  ObservableList<Todo> get todos => _todosHistory;
+  ObservableList<Todo> get todos =>
+      ObservableList.of(_todos.where((element) => element.isHistory == true));
 
   @action
   Future<void> init() async {
-    // _todosHistory.addAll(
-    //   await todoDbService.getHistoryTodoFromSF(),
-    // );
+    _todos.clear();
+    _todos.addAll(
+      await todoDbService.getTodo(),
+    );
   }
 
   @action
   Future<void> deleteHistoryTodoItems() async {
     await todoDbService.deleteHistoryTodoItems();
-    // _todosHistory =
-    //     ObservableList.of(await todoDbService.getHistoryTodoFromSF());
+    init();
   }
 }

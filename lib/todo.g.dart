@@ -23,13 +23,14 @@ class TodoAdapter extends TypeAdapter<Todo> {
       checked: fields[3] as bool,
       isEdit: fields[4] as bool,
       photo: fields[5] as String?,
+      isHistory: fields[6] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Todo obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class TodoAdapter extends TypeAdapter<Todo> {
       ..writeByte(4)
       ..write(obj.isEdit)
       ..writeByte(5)
-      ..write(obj.photo);
+      ..write(obj.photo)
+      ..writeByte(6)
+      ..write(obj.isHistory);
   }
 
   @override

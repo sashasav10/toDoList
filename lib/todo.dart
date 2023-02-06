@@ -26,7 +26,7 @@ class Todo extends HiveObject {
   final bool isEdit;
   @HiveField(5)
   final String? photo;
-  @HiveField(5)
+  @HiveField(6)
   final bool isHistory;
 
   Todo? copyWith({
@@ -36,6 +36,7 @@ class Todo extends HiveObject {
     bool? checked,
     bool? isEdit,
     String? photo,
+    bool? isHistory,
   }) =>
       Todo(
         id: id ?? this.id,
@@ -44,6 +45,7 @@ class Todo extends HiveObject {
         checked: checked ?? this.checked,
         isEdit: isEdit ?? this.isEdit,
         photo: photo ?? this.photo,
+        isHistory: isHistory ?? this.isHistory,
       );
 
   static fromJson(Map<String, dynamic> jsonData) {
@@ -54,6 +56,7 @@ class Todo extends HiveObject {
       checked: jsonData['checked'],
       isEdit: jsonData['isEdit'],
       photo: jsonData['photo'],
+      isHistory: jsonData['isHistory'],
     );
   }
 
@@ -64,5 +67,6 @@ class Todo extends HiveObject {
         'checked': todo.checked,
         'isEdit': todo.isEdit,
         'photo': todo.photo,
+        'isHistory': todo.isHistory,
       };
 }

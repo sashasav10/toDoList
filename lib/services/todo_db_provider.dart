@@ -9,28 +9,32 @@ import 'package:to_do_list/todo.dart';
 
 class TodoDbProvider {
   static TodoDbProvider of(context) => Provider.of(context, listen: false);
-  static const _todoKey = "todoList";
-  static const _todoHistoryKey = "todoHistoryList";
+  static const _todoBox = "todoBox";
 
-  Future<void> addTodos(List<Todo> todos) async {
-    final box = Hive.box('todoBox');
-    box.clear();
-    await box.put("todoListBox", todos);
+  Future<void> addTodo(Todo todo) async {
+    final box = Hive.box<Todo>(_todoBox);
+    await box.put(todo.id, todo);
   }
 
   Future<void> updateTodo(int index, Todo todo) async {
-    final box = Hive.box('todoBox');
+    final box = Hive.box<Todo>(_todoBox);
     box.putAt(index, todo);
   }
 
   Future<List<Todo>> getTodos() async {
-    final box = Hive.box('todoBox');
-    return box.get("todoListBox");
+    final box = Hive.box<Todo>(_todoBox);
+    List<Todo> todos = box.values.toList();
+    return todos;
   }
 
   Future<void> deleteTodo(int index) async {
-    final box = Hive.box('todoBox');
+    final box = Hive.box<Todo>(_todoBox);
     box.deleteAt(index);
+  }
+
+  deleteHistoryTodoItems(List keys) {
+    final box = Hive.box<Todo>(_todoBox);
+    box.deleteAll(keys);
   }
 
   String encode(List<Todo> todos) => json.encode(

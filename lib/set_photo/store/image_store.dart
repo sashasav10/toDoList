@@ -37,7 +37,7 @@ abstract class _ImageStore with Store {
 
   @action
   Future<void> init() async {
-    final todoList = await todoDbService.getTodoFromSF();
+    final todoList = await todoDbService.getTodo();
     _todos.addAll(todoList);
     todoItem = _getToDoById(todoId);
     _images = await imageApiService.getImages(todoItem.name);
@@ -54,7 +54,7 @@ abstract class _ImageStore with Store {
   }
 
   void updateDB() async {
-    final todoList = await todoDbService.getTodoFromSF();
+    final todoList = await todoDbService.getTodo();
     _todos[_getToDoIndexById(todoId)] = todoList[_getToDoIndexById(todoId)];
   }
 

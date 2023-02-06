@@ -11,7 +11,7 @@ class TodoItem extends StatelessWidget {
       {required this.todo,
       required this.onTodoChanged,
       required this.todoDelete,
-      required this.deleteDoneTodoItems,
+      required this.deleteDoneTodoItem,
       required this.todoEdit})
       : super(key: ObjectKey(todo)) {
     nameTextFieldController.text = todo.name;
@@ -21,7 +21,7 @@ class TodoItem extends StatelessWidget {
   final Todo todo;
   final Function onTodoChanged;
   final Function todoDelete;
-  final Function deleteDoneTodoItems;
+  final Function deleteDoneTodoItem;
   final Function todoEdit;
 
   final TextEditingController nameTextFieldController = TextEditingController();
@@ -155,7 +155,7 @@ class TodoItem extends StatelessWidget {
                         icon: const Icon(Icons.delete, size: 16),
                         onPressed: () {
                           if (todo.checked) {
-                            deleteDoneTodoItems();
+                            deleteDoneTodoItem(todo.id);
                           } else {
                             todoDelete(todo.id);
                           }

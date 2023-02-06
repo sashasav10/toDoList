@@ -1,4 +1,3 @@
-import 'package:mobx/src/api/observable_collections.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/services/todo_db_provider.dart';
 import 'package:to_do_list/todo.dart';
@@ -31,11 +30,11 @@ class TodoDbService {
   }
 
   Future<void> setPhoto(String id, String photo) async {
-    final _todos = await todoDbProvider.getTodos();
+    final todos = await todoDbProvider.getTodos();
     final index = await getToDoIndexById(id);
     await todoDbProvider.updateTodo(
         index,
-        _todos[index].copyWith(
+        todos[index].copyWith(
           photo: photo,
         )!);
   }
@@ -46,18 +45,32 @@ class TodoDbService {
   }
 
   Future<void> deleteDoneTodoItems() async {
-    await addDeletedToHistory();
-    final _todos = await todoDbProvider.getTodos();
-    _todos.removeWhere((element) => element.checked == true);
-    await todoDbProvider.addTodos(_todos);
+    final todos = await todoDbProvider.getTodos();
+    todos.forEach((element) async {
+      if (element.checked) {
+        final index = await getToDoIndexById(element.id);
+        final todo = todos[index];
+        await todoDbProvider.updateTodo(index, todo.copyWith(isHistory: true)!);
+      }
+    });
   }
 
-  Future<void> addDeletedToHistory() async {}
+  Future<void> deleteDoneTodoItem(String id) async {
+    final todos = await todoDbProvider.getTodos();
+    final index = await getToDoIndexById(id);
+    final todo = todos[index];
+    await todoDbProvider.updateTodo(index, todo.copyWith(isHistory: true)!);
+  }
 
   Future<void> deleteHistoryTodoItems() async {
-    // final _todosHistory = await todoDbProvider.getHistoryTodo();
-    // _todosHistory.clear();
-    //await todoDbProvider.addHistoryTodo(_todosHistory);
+    List keys = [];
+    final todos = await todoDbProvider.getTodos();
+    todos.forEach((element) async {
+      if (element.isHistory) {
+        keys.add(element.id);
+      }
+    });
+    await todoDbProvider.deleteHistoryTodoItems(keys);
   }
 
   Future<Todo> getToDoById(String id) async {
@@ -76,11 +89,11 @@ class TodoDbService {
     return index;
   }
 
-  void addTodoToSP(List<Todo> todos) {
-    todoDbProvider.addTodos(todos);
+  void addTodo(Todo todo) {
+    todoDbProvider.addTodo(todo);
   }
 
-  Future<List<Todo>> getTodoFromSF() {
+  Future<List<Todo>> getTodo() {
     return todoDbProvider.getTodos();
   }
 }
