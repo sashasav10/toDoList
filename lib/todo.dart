@@ -8,7 +8,7 @@ class Todo extends HiveObject {
     required this.id,
     required this.name,
     required this.description,
-    required this.checked,
+    this.checked = false,
     this.isEdit = false,
     this.photo,
     this.isHistory = false,

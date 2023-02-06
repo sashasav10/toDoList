@@ -25,8 +25,6 @@ abstract class _TodoStore with Store {
   final TodoDbService todoDbService;
   @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();
-  @observable
-  ObservableList<Todo> _todosHistory = ObservableList<Todo>();
   ObservableList<Todo> get todos =>
       ObservableList.of(_todos.where((element) => element.isHistory == false));
 
@@ -51,8 +49,8 @@ abstract class _TodoStore with Store {
 
   @action
   void addTodoItem(String name, String description) {
-    todoDbService.addTodo(Todo(
-        id: uuid.v1(), name: name, description: description, checked: false));
+    todoDbService
+        .addTodo(Todo(id: uuid.v1(), name: name, description: description));
     init();
   }
 
