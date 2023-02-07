@@ -49,8 +49,9 @@ abstract class _TodoStore with Store {
 
   @action
   void addTodoItem(String name, String description) {
-    todoDbService
-        .addTodo(Todo(id: uuid.v1(), name: name, description: description));
+    todoDbService.addTodo(
+      Todo(id: uuid.v1(), name: name, description: description),
+    );
     init();
   }
 

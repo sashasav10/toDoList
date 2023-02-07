@@ -81,14 +81,20 @@ class TodoItem extends StatelessWidget {
                   child: Column(
                     children: [
                       if (todo.photo == null)
-                        const Image(
-                          image: AssetImage('assets/todo_icon.jpeg'),
-                          height: 100,
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Image(
+                            image: AssetImage('assets/todo_icon.png'),
+                            height: 60,
+                          ),
                         )
                       else
-                        Image.network(
-                          todo.photo!,
-                          height: 100,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Image.network(
+                            todo.photo!,
+                            height: 100,
+                          ),
                         ),
                     ],
                   ),

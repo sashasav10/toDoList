@@ -6,7 +6,6 @@ import 'package:to_do_list/set_photo/store/image_store.dart';
 
 import '../services/todo_service.dart';
 import 'service/image_api_service.dart';
-import '../services/todo_db_provider.dart';
 import '../todo_list/todo_list_screen.dart';
 import 'models/set_photo_screen_args.dart';
 
@@ -19,7 +18,7 @@ class SetPhotoScreen extends StatefulWidget {
 }
 
 class _SetPhotoScreenState extends State<SetPhotoScreen> {
-  _SetPhotoScreenState({required this.args}) {}
+  _SetPhotoScreenState({required this.args});
   final SetPhotoScreenArgs args;
   final TextEditingController searchFieldController = TextEditingController();
 
@@ -98,18 +97,26 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
                   ],
                 ),
                 Expanded(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height / 2),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                    ),
-                    itemCount: images.value!.length,
-                    itemBuilder: (context, index) => PhotoItem(
-                      image: images.value![index].url!,
-                      setPhoto: ImageStore.of(context).setPhoto,
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      runSpacing: 5,
+                      children: images.value!
+                          .map(
+                            (value) => Padding(
+                              padding: const EdgeInsets.only(
+                                right: 8,
+                                left: 8,
+                              ),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: PhotoItem(
+                                  image: value.url!,
+                                  setPhoto: ImageStore.of(context).setPhoto,
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                 ),

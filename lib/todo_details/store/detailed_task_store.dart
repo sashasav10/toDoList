@@ -2,7 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 
-import '../../services/todo_db_provider.dart';
+import '../../provider/todo_db_provider.dart';
 import '../../services/todo_service.dart';
 
 part 'detailed_task_store.g.dart';

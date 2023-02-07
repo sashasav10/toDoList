@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/services/todo_db_provider.dart';
+import 'package:to_do_list/provider/todo_db_provider.dart';
 import '../../services/todo_service.dart';
 import '../service/image_api_service.dart';
 import '../../todo.dart';

@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../../todo_list/todo_list_screen.dart';
 
 class PhotoItem extends StatelessWidget {
-  PhotoItem({
+  const PhotoItem({
+    super.key,
     required this.image,
     required this.setPhoto,
-  }) : super(key: ObjectKey(image)) {}
+  });
 
   final String image;
   final Function setPhoto;
@@ -20,12 +21,9 @@ class PhotoItem extends StatelessWidget {
             TodoList.routeName,
           );
         },
-        child: Card(
-          elevation: 5,
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Image.network(image),
-          ),
+        child: FittedBox(
+          fit: BoxFit.cover,
+          child: Image.network(image),
         ),
       ),
     );
