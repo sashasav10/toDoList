@@ -46,7 +46,7 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
         body: Observer(
           builder: (_) {
             final images = ImageStore.of(context).images;
-            if (images == null || images.value?.length == 0) {
+            if (images == null || images.isEmpty) {
               return Column(
                 children: [
                   Row(
@@ -54,7 +54,7 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
                             controller: searchFieldController,
                             decoration: InputDecoration(
@@ -89,7 +89,7 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: searchFieldController,
                           decoration: InputDecoration(
@@ -115,10 +115,10 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: images.value!.length,
+                    controller: ImageStore.of(context).scrollController,
+                    itemCount: images.length,
                     itemBuilder: (context, index) => PhotoItem(
-                        image: images.value![index].url!,
+                        image: images[index].url!,
                         setPhoto: ImageStore.of(context).setPhoto),
                   ),
                 ),

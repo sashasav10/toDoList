@@ -31,9 +31,10 @@ abstract class _ImageStore with Store {
   final String todoId;
   final TodoDbService todoDbService;
   @observable
-  ObservableList<Value> _images = ObservableList();
-  ObservableList<Value>? get images => _images;
+  ObservableList<PhotoList> _images = ObservableList();
+  ObservableList<PhotoList>? get images => _images;
   int page = 1;
+  String _searchText = "";
   final ObservableList<Todo> _todos = ObservableList<Todo>();
   final scrollController = ScrollController();
 
@@ -43,26 +44,28 @@ abstract class _ImageStore with Store {
     final todoList = await todoDbService.getTodo();
     _todos.addAll(todoList);
     todoItem = _getToDoById(todoId);
-    final newList = await imageApiService.getImages(todoItem.name, page);
-    _images.addAll(newList);
-    scrollController.addListener(() {});
+    _searchText = todoItem.name;
+    _images =
+        ObservableList.of(await imageApiService.getImages(todoItem.name, page));
+    scrollController.addListener(() => _onScroll());
   }
 
-  onScroll() {
+  void _onScroll() {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      searchNextPage("");
+      searchNextPage();
       print("Спрацював пагінатор");
     }
   }
 
   searchByPressedButton(searchText) async {
-    _images = await imageApiService.getImages(searchText, page);
+    _searchText = searchText;
+    _images = await imageApiService.getImages(_searchText, page);
   }
 
-  searchNextPage(searchText) async {
+  searchNextPage() async {
     page++;
-    _images = await imageApiService.getImages(searchText, page);
+    _images.addAll(await imageApiService.getImages(_searchText, page));
   }
 
   @action

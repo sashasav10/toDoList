@@ -13,13 +13,13 @@ mixin _$ImageStore on _ImageStore, Store {
       Atom(name: '_ImageStore._images', context: context);
 
   @override
-  ImageResult? get _images {
+  ObservableList<PhotoList> get _images {
     _$_imagesAtom.reportRead();
     return super._images;
   }
 
   @override
-  set _images(ImageResult? value) {
+  set _images(ObservableList<PhotoList> value) {
     _$_imagesAtom.reportWrite(value, super._images, () {
       super._images = value;
     });
