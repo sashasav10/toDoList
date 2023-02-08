@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/provider/todo_db_provider.dart';
 import '../../services/todo_service.dart';
 import '../service/image_api_service.dart';
 import '../../todo.dart';
@@ -31,20 +31,38 @@ abstract class _ImageStore with Store {
   final String todoId;
   final TodoDbService todoDbService;
   @observable
-  ImageResult? _images;
-  ImageResult? get images => _images;
+  ObservableList<Value> _images = ObservableList();
+  ObservableList<Value>? get images => _images;
+  int page = 1;
   final ObservableList<Todo> _todos = ObservableList<Todo>();
+  final scrollController = ScrollController();
 
   @action
   Future<void> init() async {
+    page = 1;
     final todoList = await todoDbService.getTodo();
     _todos.addAll(todoList);
     todoItem = _getToDoById(todoId);
-    _images = await imageApiService.getImages(todoItem.name);
+    final newList = await imageApiService.getImages(todoItem.name, page);
+    _images.addAll(newList);
+    scrollController.addListener(() {});
+  }
+
+  onScroll() {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      searchNextPage("");
+      print("Спрацював пагінатор");
+    }
   }
 
   searchByPressedButton(searchText) async {
-    _images = await imageApiService.getImages(searchText);
+    _images = await imageApiService.getImages(searchText, page);
+  }
+
+  searchNextPage(searchText) async {
+    page++;
+    _images = await imageApiService.getImages(searchText, page);
   }
 
   @action

@@ -106,7 +106,12 @@ class TodoItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (todo.isEdit)
-                      TextField(controller: nameTextFieldController)
+                      SizedBox(
+                        height: 15,
+                        child: TextField(
+                          controller: nameTextFieldController,
+                        ),
+                      )
                     else
                       Text(
                         todo.name,
@@ -115,16 +120,21 @@ class TodoItem extends StatelessWidget {
                         maxLines: 2,
                       ),
                     const SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
                     if (todo.isEdit)
-                      TextField(controller: descriptionTextFieldController)
+                      SizedBox(
+                        height: 15,
+                        child: TextField(
+                          controller: descriptionTextFieldController,
+                        ),
+                      )
                     else
                       Text(
                         todo.description,
                         style: _getTextStyle(todo.checked),
-                        overflow: TextOverflow.fade,
-                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
                       ),
                   ],
                 ),

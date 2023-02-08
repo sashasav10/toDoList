@@ -46,26 +46,35 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
         body: Observer(
           builder: (_) {
             final images = ImageStore.of(context).images;
-            if (images == null) {
+            if (images == null || images.value?.length == 0) {
               return Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: TextFormField(
-                          controller: searchFieldController,
-                          decoration: const InputDecoration(
-                              hintText: 'Search photo for icon'),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: searchFieldController,
+                            decoration: InputDecoration(
+                              hintText: 'Search photo for icon',
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.search),
+                                color: Colors.red,
+                                onPressed: () {
+                                  ImageStore.of(context).searchByPressedButton(
+                                      searchFieldController.text);
+                                },
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.search),
-                        iconSize: 40,
-                        onPressed: () {
-                          ImageStore.of(context).searchByPressedButton(
-                              searchFieldController.text);
-                        },
                       ),
                     ],
                   ),
@@ -77,47 +86,40 @@ class _SetPhotoScreenState extends State<SetPhotoScreen> {
             return Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: TextFormField(
-                        controller: searchFieldController,
-                        decoration: const InputDecoration(
-                            hintText: 'Search photo for icon'),
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: searchFieldController,
+                          decoration: InputDecoration(
+                            hintText: 'Search photo for icon',
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.red,
+                              ),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.search),
+                              color: Colors.red,
+                              onPressed: () {
+                                ImageStore.of(context).searchByPressedButton(
+                                    searchFieldController.text);
+                              },
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      iconSize: 40,
-                      onPressed: () {
-                        ImageStore.of(context)
-                            .searchByPressedButton(searchFieldController.text);
-                      },
-                    )
                   ],
                 ),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Wrap(
-                      runSpacing: 5,
-                      children: images.value!
-                          .map(
-                            (value) => Padding(
-                              padding: const EdgeInsets.only(
-                                right: 8,
-                                left: 8,
-                              ),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: PhotoItem(
-                                  image: value.url!,
-                                  setPhoto: ImageStore.of(context).setPhoto,
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: images.value!.length,
+                    itemBuilder: (context, index) => PhotoItem(
+                        image: images.value![index].url!,
+                        setPhoto: ImageStore.of(context).setPhoto),
                   ),
                 ),
               ],

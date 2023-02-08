@@ -49,7 +49,7 @@ class _TodoHistoryListState extends State<TodoHistoryList> {
             child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 1.5),
+                      (MediaQuery.of(context).size.height / 1.7),
                   crossAxisCount: 2,
                   mainAxisSpacing: 4,
                   crossAxisSpacing: 4,

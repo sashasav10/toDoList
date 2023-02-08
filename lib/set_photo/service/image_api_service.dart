@@ -7,7 +7,7 @@ class ImageApiService {
   final ImageApiProvider apiProvider;
   static ImageApiService of(context) => Provider.of(context, listen: false);
 
-  Future<ImageResult> getImages(String searchText) async {
-    return apiProvider.fetchImages(searchText);
+  Future<List<Value?>> getImages(String searchText, int page) async {
+    return apiProvider.fetchImages(searchText, page);
   }
 }
