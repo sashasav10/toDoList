@@ -107,14 +107,11 @@ class TodoItem extends StatelessWidget {
                           ),
                         )
                       else
-                        FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: Text(
-                            todo.name,
-                            style: _getTitleTextStyle(todo.checked),
-                            overflow: TextOverflow.fade,
-                            maxLines: 2,
-                          ),
+                        Text(
+                          todo.name,
+                          style: _getTitleTextStyle(todo.checked),
+                          overflow: TextOverflow.fade,
+                          maxLines: 2,
                         ),
                       const SizedBox(
                         height: 15,
@@ -127,14 +124,11 @@ class TodoItem extends StatelessWidget {
                           ),
                         )
                       else
-                        FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: Text(
-                            todo.description,
-                            style: _getTextStyle(todo.checked),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
-                          ),
+                        Text(
+                          todo.description,
+                          style: _getTextStyle(todo.checked),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
                         ),
                     ],
                   ),
