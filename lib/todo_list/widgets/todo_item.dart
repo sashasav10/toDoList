@@ -81,19 +81,59 @@ class TodoItem extends StatelessWidget {
                   child: Column(
                     children: [
                       if (todo.photo == null)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Image(
-                            image: AssetImage('assets/todo_icon.png'),
-                            height: 60,
-                          ),
+                        const Image(
+                          image: AssetImage('assets/todo_icon.png'),
+                          height: 60,
                         )
                       else
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
+                        SizedBox(
+                          width: double.infinity,
                           child: Image.network(
                             todo.photo!,
                             height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+
+
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      if (todo.isEdit)
+                        SizedBox(
+                          height: 15,
+                          child: TextField(
+                            controller: nameTextFieldController,
+                          ),
+                        )
+                      else
+                        FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            todo.name,
+                            style: _getTitleTextStyle(todo.checked),
+                            overflow: TextOverflow.fade,
+                            maxLines: 2,
+                          ),
+                        ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      if (todo.isEdit)
+                        SizedBox(
+                          height: 15,
+                          child: TextField(
+                            controller: descriptionTextFieldController,
+                          ),
+                        )
+                      else
+                        FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            todo.description,
+                            style: _getTextStyle(todo.checked),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
                           ),
                         ),
                     ],
@@ -105,41 +145,12 @@ class TodoItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (todo.isEdit)
-                      SizedBox(
-                        height: 15,
-                        child: TextField(
-                          controller: nameTextFieldController,
-                        ),
-                      )
-                    else
-                      Text(
-                        todo.name,
-                        style: _getTitleTextStyle(todo.checked),
-                        overflow: TextOverflow.fade,
-                        maxLines: 2,
-                      ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    if (todo.isEdit)
-                      SizedBox(
-                        height: 15,
-                        child: TextField(
-                          controller: descriptionTextFieldController,
-                        ),
-                      )
-                    else
-                      Text(
-                        todo.description,
-                        style: _getTextStyle(todo.checked),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                      ),
+
                   ],
                 ),
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Divider(
                     thickness: 0,
