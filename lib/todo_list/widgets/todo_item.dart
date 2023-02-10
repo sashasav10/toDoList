@@ -83,7 +83,7 @@ class TodoItem extends StatelessWidget {
                       if (todo.photo == null)
                         const Image(
                           image: AssetImage('assets/todo_icon.png'),
-                          height: 60,
+                          height: 100,
                         )
                       else
                         SizedBox(
@@ -94,8 +94,6 @@ class TodoItem extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-
-
                       const SizedBox(
                         height: 15,
                       ),
@@ -107,11 +105,14 @@ class TodoItem extends StatelessWidget {
                           ),
                         )
                       else
-                        Text(
-                          todo.name,
-                          style: _getTitleTextStyle(todo.checked),
-                          overflow: TextOverflow.fade,
-                          maxLines: 2,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          child: Text(
+                            todo.name,
+                            style: _getTitleTextStyle(todo.checked),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
                         ),
                       const SizedBox(
                         height: 15,
@@ -124,11 +125,14 @@ class TodoItem extends StatelessWidget {
                           ),
                         )
                       else
-                        Text(
-                          todo.description,
-                          style: _getTextStyle(todo.checked),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          child: Text(
+                            todo.description,
+                            style: _getTextStyle(todo.checked),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
                         ),
                     ],
                   ),
