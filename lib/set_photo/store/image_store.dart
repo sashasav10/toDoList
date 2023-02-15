@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/services/todo_db_provider.dart';
 import '../../services/todo_service.dart';
 import '../service/image_api_service.dart';
 import '../../todo.dart';
@@ -31,20 +31,41 @@ abstract class _ImageStore with Store {
   final String todoId;
   final TodoDbService todoDbService;
   @observable
-  ImageResult? _images;
-  ImageResult? get images => _images;
+  ObservableList<PhotoList> _images = ObservableList();
+  ObservableList<PhotoList>? get images => _images;
+  int page = 1;
+  String _searchText = "";
   final ObservableList<Todo> _todos = ObservableList<Todo>();
+  final scrollController = ScrollController();
 
   @action
   Future<void> init() async {
-    final todoList = await todoDbService.getTodoFromSF();
+    page = 1;
+    final todoList = await todoDbService.getTodo();
     _todos.addAll(todoList);
     todoItem = _getToDoById(todoId);
-    _images = await imageApiService.getImages(todoItem.name);
+    _searchText = todoItem.name;
+    _images =
+        ObservableList.of(await imageApiService.getImages(todoItem.name, page));
+    scrollController.addListener(() => _onScroll());
+  }
+
+  void _onScroll() {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      searchNextPage();
+      print("Спрацював пагінатор");
+    }
   }
 
   searchByPressedButton(searchText) async {
-    _images = await imageApiService.getImages(searchText);
+    _searchText = searchText;
+    _images = await imageApiService.getImages(_searchText, page);
+  }
+
+  searchNextPage() async {
+    page++;
+    _images.addAll(await imageApiService.getImages(_searchText, page));
   }
 
   @action
@@ -54,7 +75,7 @@ abstract class _ImageStore with Store {
   }
 
   void updateDB() async {
-    final todoList = await todoDbService.getTodoFromSF();
+    final todoList = await todoDbService.getTodo();
     _todos[_getToDoIndexById(todoId)] = todoList[_getToDoIndexById(todoId)];
   }
 

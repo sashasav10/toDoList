@@ -11,7 +11,7 @@ class TodoItem extends StatelessWidget {
       {required this.todo,
       required this.onTodoChanged,
       required this.todoDelete,
-      required this.deleteDoneTodoItems,
+      required this.deleteDoneTodoItem,
       required this.todoEdit})
       : super(key: ObjectKey(todo)) {
     nameTextFieldController.text = todo.name;
@@ -21,7 +21,7 @@ class TodoItem extends StatelessWidget {
   final Todo todo;
   final Function onTodoChanged;
   final Function todoDelete;
-  final Function deleteDoneTodoItems;
+  final Function deleteDoneTodoItem;
   final Function todoEdit;
 
   final TextEditingController nameTextFieldController = TextEditingController();
@@ -82,13 +82,57 @@ class TodoItem extends StatelessWidget {
                     children: [
                       if (todo.photo == null)
                         const Image(
-                          image: AssetImage('assets/todo_icon.jpeg'),
+                          image: AssetImage('assets/todo_icon.png'),
                           height: 100,
                         )
                       else
-                        Image.network(
-                          todo.photo!,
-                          height: 100,
+                        SizedBox(
+                          width: double.infinity,
+                          child: Image.network(
+                            todo.photo!,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      if (todo.isEdit)
+                        SizedBox(
+                          height: 15,
+                          child: TextField(
+                            controller: nameTextFieldController,
+                          ),
+                        )
+                      else
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          child: Text(
+                            todo.name,
+                            style: _getTitleTextStyle(todo.checked),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                        ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      if (todo.isEdit)
+                        SizedBox(
+                          height: 15,
+                          child: TextField(
+                            controller: descriptionTextFieldController,
+                          ),
+                        )
+                      else
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          child: Text(
+                            todo.description,
+                            style: _getTextStyle(todo.checked),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
                         ),
                     ],
                   ),
@@ -99,31 +143,12 @@ class TodoItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (todo.isEdit)
-                      TextField(controller: nameTextFieldController)
-                    else
-                      Text(
-                        todo.name,
-                        style: _getTitleTextStyle(todo.checked),
-                        overflow: TextOverflow.fade,
-                        maxLines: 2,
-                      ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    if (todo.isEdit)
-                      TextField(controller: descriptionTextFieldController)
-                    else
-                      Text(
-                        todo.description,
-                        style: _getTextStyle(todo.checked),
-                        overflow: TextOverflow.fade,
-                        maxLines: 4,
-                      ),
+
                   ],
                 ),
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Divider(
                     thickness: 0,
@@ -155,7 +180,7 @@ class TodoItem extends StatelessWidget {
                         icon: const Icon(Icons.delete, size: 16),
                         onPressed: () {
                           if (todo.checked) {
-                            deleteDoneTodoItems();
+                            deleteDoneTodoItem(todo.id);
                           } else {
                             todoDelete(todo.id);
                           }

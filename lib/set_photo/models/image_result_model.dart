@@ -1,17 +1,19 @@
+import 'package:mobx/mobx.dart';
+
 class ImageResult {
   String? sType;
   int? totalCount;
-  List<Value>? value;
+  ObservableList<PhotoList>? photoList;
 
-  ImageResult({this.sType, this.totalCount, this.value});
+  ImageResult({this.sType, this.totalCount, this.photoList});
 
   ImageResult.fromJson(Map<String, dynamic> json) {
     sType = json['_type'];
     totalCount = json['totalCount'];
     if (json['value'] != null) {
-      value = <Value>[];
+      photoList = ObservableList<PhotoList>();
       json['value'].forEach((v) {
-        value!.add(new Value.fromJson(v));
+        photoList?.add(new PhotoList.fromJson(v));
       });
     }
   }
@@ -20,14 +22,14 @@ class ImageResult {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_type'] = this.sType;
     data['totalCount'] = this.totalCount;
-    if (this.value != null) {
-      data['value'] = this.value!.map((v) => v.toJson()).toList();
+    if (this.photoList != null) {
+      data['value'] = this.photoList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Value {
+class PhotoList {
   String? url;
   int? height;
   int? width;
@@ -41,7 +43,7 @@ class Value {
   String? imageWebSearchUrl;
   String? webpageUrl;
 
-  Value(
+  PhotoList(
       {this.url,
       this.height,
       this.width,
@@ -55,7 +57,7 @@ class Value {
       this.imageWebSearchUrl,
       this.webpageUrl});
 
-  Value.fromJson(Map<String, dynamic> json) {
+  PhotoList.fromJson(Map<String, dynamic> json) {
     url = json['url'];
     height = json['height'];
     width = json['width'];

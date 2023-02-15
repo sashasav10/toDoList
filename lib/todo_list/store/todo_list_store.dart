@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../services/todo_db_provider.dart';
 import '../../services/todo_service.dart';
 
 part 'todo_list_store.g.dart';
@@ -26,36 +25,34 @@ abstract class _TodoStore with Store {
   final TodoDbService todoDbService;
   @observable
   ObservableList<Todo> _todos = ObservableList<Todo>();
-  @observable
-  ObservableList<Todo> _todosHistory = ObservableList<Todo>();
-  ObservableList<Todo> get todos => _todos;
+  ObservableList<Todo> get todos =>
+      ObservableList.of(_todos.where((element) => element.isHistory == false));
 
   @action
   Future<void> init() async {
     _todos.clear();
     _todos.addAll(
-      await todoDbService.getTodoFromSF(),
+      await todoDbService.getTodo(),
     );
   }
 
   @action
   Future<void> updateTodos() async {
-    _todos = ObservableList.of(await todoDbService.getTodoFromSF());
+    _todos = ObservableList.of(await todoDbService.getTodo());
   }
 
   @action
   Future<void> markAsDone(String id) async {
     await todoDbService.markAsDone(id);
     await updateTodos();
-    print(_todos);
   }
 
   @action
   void addTodoItem(String name, String description) {
-    _todos.add(
-      Todo(id: uuid.v1(), name: name, description: description, checked: false),
+    todoDbService.addTodo(
+      Todo(id: uuid.v1(), name: name, description: description),
     );
-    todoDbService.addTodoToSP(_todos);
+    init();
   }
 
   @action
@@ -74,6 +71,12 @@ abstract class _TodoStore with Store {
   @action
   Future<void> deleteDoneTodoItems() async {
     await todoDbService.deleteDoneTodoItems();
+    await updateTodos();
+  }
+
+  @action
+  Future<void> deleteDoneTodoItem(String id) async {
+    await todoDbService.deleteDoneTodoItem(id);
     await updateTodos();
   }
 }

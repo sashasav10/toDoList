@@ -24,22 +24,6 @@ mixin _$TodoStore on _TodoStore, Store {
     });
   }
 
-  late final _$_todosHistoryAtom =
-      Atom(name: '_TodoStore._todosHistory', context: context);
-
-  @override
-  ObservableList<Todo> get _todosHistory {
-    _$_todosHistoryAtom.reportRead();
-    return super._todosHistory;
-  }
-
-  @override
-  set _todosHistory(ObservableList<Todo> value) {
-    _$_todosHistoryAtom.reportWrite(value, super._todosHistory, () {
-      super._todosHistory = value;
-    });
-  }
-
   late final _$initAsyncAction =
       AsyncAction('_TodoStore.init', context: context);
 
@@ -89,6 +73,15 @@ mixin _$TodoStore on _TodoStore, Store {
   Future<void> deleteDoneTodoItems() {
     return _$deleteDoneTodoItemsAsyncAction
         .run(() => super.deleteDoneTodoItems());
+  }
+
+  late final _$deleteDoneTodoItemAsyncAction =
+      AsyncAction('_TodoStore.deleteDoneTodoItem', context: context);
+
+  @override
+  Future<void> deleteDoneTodoItem(String id) {
+    return _$deleteDoneTodoItemAsyncAction
+        .run(() => super.deleteDoneTodoItem(id));
   }
 
   late final _$_TodoStoreActionController =

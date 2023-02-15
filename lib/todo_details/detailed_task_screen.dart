@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/services/todo_db_provider.dart';
+import 'package:to_do_list/provider/todo_db_provider.dart';
 import 'package:to_do_list/services/todo_service.dart';
 import 'package:to_do_list/todo_details/models/detailed_task_screen_args.dart';
 import 'package:to_do_list/todo_details/store/detailed_task_store.dart';

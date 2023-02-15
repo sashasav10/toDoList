@@ -5,7 +5,7 @@ import 'package:to_do_list/services/todo_service.dart';
 import 'package:to_do_list/todo_history/store/todo_history_list_store.dart';
 import 'package:to_do_list/todo_history/widget/todo_history_item.dart';
 
-import '../services/todo_db_provider.dart';
+import '../provider/todo_db_provider.dart';
 
 class TodoHistoryList extends StatefulWidget {
   const TodoHistoryList({super.key});
@@ -49,7 +49,7 @@ class _TodoHistoryListState extends State<TodoHistoryList> {
             child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 1.5),
+                      (MediaQuery.of(context).size.height / 1.7),
                   crossAxisCount: 2,
                   mainAxisSpacing: 4,
                   crossAxisSpacing: 4,

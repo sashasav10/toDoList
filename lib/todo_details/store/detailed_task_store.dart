@@ -2,7 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/todo.dart';
 
-import '../../services/todo_db_provider.dart';
+import '../../provider/todo_db_provider.dart';
 import '../../services/todo_service.dart';
 
 part 'detailed_task_store.g.dart';
@@ -30,7 +30,7 @@ abstract class _DetailedTaskStore with Store {
   @action
   Future<void> init() async {
     isLoading = true;
-    final todoList = await todoDbService.getTodoFromSF();
+    final todoList = await todoDbService.getTodo();
     _todos.addAll(todoList);
     todoItem = _getToDoById(id);
     await Future.delayed(const Duration(seconds: 1));
@@ -39,7 +39,7 @@ abstract class _DetailedTaskStore with Store {
 
   @action
   Future<void> updateTodos() async {
-    _todos = ObservableList.of(await todoDbService.getTodoFromSF());
+    _todos = ObservableList.of(await todoDbService.getTodo());
     todoItem = _getToDoById(id);
   }
 

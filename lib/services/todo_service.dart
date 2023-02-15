@@ -1,6 +1,5 @@
-import 'package:mobx/src/api/observable_collections.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/services/todo_db_provider.dart';
+import 'package:to_do_list/provider/todo_db_provider.dart';
 import 'package:to_do_list/todo.dart';
 
 class TodoDbService {
@@ -12,44 +11,70 @@ class TodoDbService {
   static TodoDbService of(context) => Provider.of(context, listen: false);
 
   Future<void> markAsDone(String id) async {
-    final todos = await todoDbProvider.getTodoFromSF();
+    final todos = await todoDbProvider.getTodos();
     final index = await getToDoIndexById(id);
     final todo = todos[index];
-    todos[index] = todo.copyWith(checked: !todo.checked)!;
-    await todoDbProvider.addTodoToSP(todos);
+    await todoDbProvider.updateTodo(
+        index, todo.copyWith(checked: !todo.checked)!);
+  }
+
+  Future<void> editTodoItem(
+      String id, String name, String description, bool isEdit) async {
+    final todos = await todoDbProvider.getTodos();
+    final index = await getToDoIndexById(id);
+    final todo = todos[index];
+    await todoDbProvider.updateTodo(
+        index,
+        todo.copyWith(
+            id: id, name: name, description: description, isEdit: isEdit)!);
+  }
+
+  Future<void> setPhoto(String id, String photo) async {
+    final todos = await todoDbProvider.getTodos();
+    final index = await getToDoIndexById(id);
+    await todoDbProvider.updateTodo(
+        index,
+        todos[index].copyWith(
+          photo: photo,
+        )!);
   }
 
   Future<void> deleteTodoItem(String id) async {
-    final _todos = await todoDbProvider.getTodoFromSF();
-    _todos.removeWhere((item) => item.id == id);
-    await todoDbProvider.addTodoToSP(_todos);
+    final index = await getToDoIndexById(id);
+    await todoDbProvider.deleteTodo(index);
   }
 
   Future<void> deleteDoneTodoItems() async {
-    await addDeletedToHistory();
-    final _todos = await todoDbProvider.getTodoFromSF();
-    _todos.removeWhere((element) => element.checked == true);
-    await todoDbProvider.addTodoToSP(_todos);
+    final todos = await todoDbProvider.getTodos();
+    todos.forEach((element) async {
+      if (element.checked) {
+        final index = await getToDoIndexById(element.id);
+        final todo = todos[index];
+        await todoDbProvider.updateTodo(index, todo.copyWith(isHistory: true)!);
+      }
+    });
   }
 
-  Future<void> addDeletedToHistory() async {
-    final _todosHistory = await todoDbProvider.getHistoryTodoFromSF();
-    final _todos = await todoDbProvider.getTodoFromSF();
-    _todosHistory
-        .addAll(_todos.where((element) => element.checked == true).toList());
-    await todoDbProvider.addHistoryTodoToSP(_todosHistory);
-    _todos.removeWhere((element) => element.checked == true);
-    await todoDbProvider.addTodoToSP(_todos);
+  Future<void> deleteDoneTodoItem(String id) async {
+    final todos = await todoDbProvider.getTodos();
+    final index = await getToDoIndexById(id);
+    final todo = todos[index];
+    await todoDbProvider.updateTodo(index, todo.copyWith(isHistory: true)!);
   }
 
   Future<void> deleteHistoryTodoItems() async {
-    final _todosHistory = await todoDbProvider.getHistoryTodoFromSF();
-    _todosHistory.clear();
-    await todoDbProvider.addHistoryTodoToSP(_todosHistory);
+    List keys = [];
+    final todos = await todoDbProvider.getTodos();
+    todos.forEach((element) async {
+      if (element.isHistory) {
+        keys.add(element.id);
+      }
+    });
+    await todoDbProvider.deleteHistoryTodoItems(keys);
   }
 
   Future<Todo> getToDoById(String id) async {
-    final todos = await todoDbProvider.getTodoFromSF();
+    final todos = await todoDbProvider.getTodos();
     final index = todos.indexWhere((element) => element.id == id);
     if (index < 0) throw Exception("Index must be more than 0");
 
@@ -57,44 +82,18 @@ class TodoDbService {
   }
 
   Future<int> getToDoIndexById(String id) async {
-    final todos = await todoDbProvider.getTodoFromSF();
+    final todos = await todoDbProvider.getTodos();
     final index = todos.indexWhere((element) => element.id == id);
     if (index < 0) throw Exception("Index must be more than 0");
 
     return index;
   }
 
-  Future<void> setPhoto(String id, String photo) async {
-    final _todos = await todoDbProvider.getTodoFromSF();
-    final index = await getToDoIndexById(id);
-    _todos[index] = _todos[index].copyWith(
-      photo: photo,
-    )!;
-    await todoDbProvider.addTodoToSP(_todos);
+  void addTodo(Todo todo) {
+    todoDbProvider.addTodo(todo);
   }
 
-  void addTodoToSP(List<Todo> todos) {
-    todoDbProvider.addTodoToSP(todos);
-  }
-
-  void addHistoryTodoToSP(List<Todo> todosHistory) {
-    todoDbProvider.addHistoryTodoToSP(todosHistory);
-  }
-
-  Future<List<Todo>> getHistoryTodoFromSF() {
-    return todoDbProvider.getHistoryTodoFromSF();
-  }
-
-  Future<List<Todo>> getTodoFromSF() {
-    return todoDbProvider.getTodoFromSF();
-  }
-
-  Future<void> editTodoItem(
-      String id, String name, String description, bool isEdit) async {
-    final todos = await todoDbProvider.getTodoFromSF();
-    final index = await getToDoIndexById(id);
-    todos[index] = todos[index].copyWith(
-        id: id, name: name, description: description, isEdit: isEdit)!;
-    addTodoToSP(todos);
+  Future<List<Todo>> getTodo() {
+    return todoDbProvider.getTodos();
   }
 }

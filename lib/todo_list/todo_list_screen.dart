@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/services/todo_db_provider.dart';
+import 'package:to_do_list/provider/todo_db_provider.dart';
 import 'package:to_do_list/todo_history/todo_history_screen.dart';
 import 'package:to_do_list/todo_list/store/todo_list_store.dart';
 import 'package:to_do_list/todo_list/widgets/todo_item.dart';
@@ -68,7 +68,7 @@ class TodoList extends StatelessWidget {
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 1.5),
+                    (MediaQuery.of(context).size.height / 1.55),
                 crossAxisCount: 2,
                 mainAxisSpacing: 4,
                 crossAxisSpacing: 4,
@@ -78,7 +78,7 @@ class TodoList extends StatelessWidget {
                 todo: TodoStore.of(context).todos[index],
                 onTodoChanged: TodoStore.of(context).markAsDone,
                 todoDelete: TodoStore.of(context).deleteTodoItem,
-                deleteDoneTodoItems: TodoStore.of(context).deleteDoneTodoItems,
+                deleteDoneTodoItem: TodoStore.of(context).deleteDoneTodoItem,
                 todoEdit: TodoStore.of(context).editTodoItem,
               ),
             ),
